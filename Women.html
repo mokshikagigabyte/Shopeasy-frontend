@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Women - ShopEasy</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+ <nav class="navbar">
+    <div class="logo">
+      <h2>ShopEasy</h2>
+    </div>
+    <button class="hamburger" aria-label="Toggle Menu">
+      <i class="fas fa-bars"></i>
+    </button>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="category .html">Category</a></li>
+      <li><a href="help.html">Help</a></li>
+    </ul>
+    <div class="nav-right">
+      <div class="search-bar">
+        <input type="text" id="searchInput" placeholder="Search products...">
+        <i class="fas fa-search"></i>
+        <div id="searchResults" class="search-results"></div>
+      </div>
+      <a href="wishlist.html" class="nav-icon"><i class="fas fa-heart"></i></a>
+      <a href="yourcart.html" class="nav-icon"><i class="fas fa-shopping-cart"></i></a>
+    </div>
+  </nav>
+  <div class="product-container" data-section-id="dresses">
+    <h1 class="section-title" style="border:1px solid black; border-radius: 12px;">Dresses Section</h1>
+    <div class="section-content">
+      <div class="product-grid">
+        <div class="product-card" data-id="women-1">
+          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRgncMEc1lZt7sTKsYlmSBdOeF3Gu1dCkxNOnvLsz-khQ&s" alt="Red Dress">
+          <div class="product-info">
+            <h3>Red Dress</h3>
+            <p>₹1199</p>
+            <button class="add-to-cart">Add to Cart</button>
+            <a href="order.html" class="order-now">Order-Now</a>
+            <i class="fas fa-heart wishlist-icon" data-id="women-1" data-name="Red Dress" data-price="1199" data-image="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRgncMEc1lZt7sTKsYlmSBdOeF3Gu1dCkxNOnvLsz-khQ&s"></i>
+          </div>
+        </div>
+        <div class="product-card" data-id="women-2">
+          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQROZd82kaSUggdZ2XtOfxgsNLQJrqM28qvG1juZGepnA&s" alt="Black Dress">
+          <div class="product-info">
+            <h3>Black Dress</h3>
+            <p>₹1299</p>
+            <button class="add-to-cart">Add to Cart</button>
+           <a href="order.html" class="order-now">Order-Now</a>
+            <i class="fas fa-heart wishlist-icon" data-id="women-2" data-name="Black Dress" data-price="1299" data-image="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQROZd82kaSUggdZ2XtOfxgsNLQJrqM28qvG1juZGepnA&s"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="product-container" data-section-id="tops">
+    <h1 class="section-title" style="border:1px solid black; border-radius: 12px;">Tops Section</h1>
+    <div class="section-content">
+      <div class="product-grid">
+        <div class="product-card" data-id="women-3">
+          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ60FbzuKmoiL_p2VsDC0NidfP5fY_s4I60CspqTnECXQ&s" alt="White Top">
+          <div class="product-info">
+            <h3>long Top</h3>
+            <p>₹699</p>
+            <button class="add-to-cart">Add to Cart</button>
+            <a href="order.html" class="order-now">Order-Now</a>
+            <i class="fas fa-heart wishlist-icon" data-id="women-3" data-name="White Top" data-price="699" data-image="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ60FbzuKmoiL_p2VsDC0NidfP5fY_s4I60CspqTnECXQ&s"></i>
+          </div>
+        </div>
+        <div class="product-card" data-id="women-4">
+          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSxg-SQRrAIdriRSwKZp8QzMcZcdnuNt_xQFIATcTLztQ&s" alt="Blue Top">
+          <div class="product-info">
+            <h3>blue Top</h3>
+            <p>₹749</p>
+            <button class="add-to-cart">Add to Cart</button>
+           <a href="order.html" class="order-now">Order-Now</a>
+            <i class="fas fa-heart wishlist-icon" data-id="women-4" data-name="Blue Top" data-price="749" data-image="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSxg-SQRrAIdriRSwKZp8QzMcZcdnuNt_xQFIATcTLztQ&s"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="product-container" data-section-id="skirts">
+    <h1 class="section-title" style="border:1px solid black; border-radius: 12px;">Skirts Section</h1>
+    <div class="section-content">
+      <div class="product-grid">
+        <div class="product-card" data-id="women-5">
+          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTliYswKkFQ9wAwF1EZx8W1p7Qw-M90U_7giwgDUgzO_WsWzSENllB3gEE&s=10" alt="Red Skirt">
+          <div class="product-info">
+            <h3>Long Skirt</h3>
+            <p>₹599</p>
+            <button class="add-to-cart">Add to Cart</button>
+           <a href="order.html" class="order-now">Order-Now</a>
+            <i class="fas fa-heart wishlist-icon" data-id="women-5" data-name="Red Skirt" data-price="599" data-image="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTliYswKkFQ9wAwF1EZx8W1p7Qw-M90U_7giwgDUgzO_WsWzSENllB3gEE&s=10"></i>
+          </div>
+        </div>
+        <div class="product-card" data-id="women-6">
+          <img src="https://d1flfk77wl2xk4.cloudfront.net/Assets/60/348/XL_p0184534860.jpg" alt="Black Skirt">
+          <div class="product-info">
+            <h3>Short Skirt</h3>
+            <p>₹649</p>
+            <button class="add-to-cart">Add to Cart</button>
+           <a href="order.html" class="order-now">Order-Now</a>
+            <i class="fas fa-heart wishlist-icon" data-id="women-6" data-name="Black Skirt" data-price="649" data-image="https://d1flfk77wl2xk4.cloudfront.net/Assets/60/348/XL_p0184534860.jpg"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="product-container" data-section-id="heels">
+    <h1 class="section-title" style="border:1px solid black; border-radius: 12px;">Heels Section</h1>
+    <div class="section-content">
+      <div class="product-grid">
+        <div class="product-card" data-id="women-7">
+          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSPd6bGJlQPUpdisJsCyIV0O3y9ca2cmi4zXJHhG1aGxqFaVs41P1sH_SA&s=10" alt="High Heels">
+          <div class="product-info">
+            <h3>High Heels</h3>
+            <p>₹1499</p>
+            <button class="add-to-cart">Add to Cart</button>
+           <a href="order.html" class="order-now">Order-Now</a>
+            <i class="fas fa-heart wishlist-icon" data-id="women-7" data-name="High Heels" data-price="1499" data-image="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSPd6bGJlQPUpdisJsCyIV0O3y9ca2cmi4zXJHhG1aGxqFaVs41P1sH_SA&s=10"></i>
+          </div>
+        </div>
+        <div class="product-card" data-id="women-8">
+          <img src="https://assets.ajio.com/medias/sys_master/root/20230822/MxxD/64e4b8e9ddf7791519603869/-473Wx593H-466484656-black-MODEL.jpg" alt="Low Heels">
+          <div class="product-info">
+            <h3>Low Heels</h3>
+            <p>₹1399</p>
+            <button class="add-to-cart">Add to Cart</button>
+           <a href="order.html" class="order-now">Order-Now</a>
+            <i class="fas fa-heart wishlist-icon" data-id="women-8" data-name="Low Heels" data-price="1399" data-image="https://assets.ajio.com/medias/sys_master/root/20230822/MxxD/64e4b8e9ddf7791519603869/-473Wx593H-466484656-black-MODEL.jpg"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>

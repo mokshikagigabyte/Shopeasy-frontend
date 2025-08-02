@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Elegant Login/Register Form</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="auth-page" id="auth-section">
+    <div class="form-container" id="loginForm">
+      <h2>Login</h2>
+      <form autocomplete="off" id="login-form">
+        <div class="form-group">
+          <input type="email" id="login-email" required>
+          <label>Email</label>
+        </div>
+        <div class="form-group">
+          <input type="password" id="login-password" required>
+          <label>Password</label>
+        </div>
+        <button type="submit" id="login-btn">Login</button>
+        <div class="toggle-link">Don't have an account? Register</div>
+      </form>
+    </div>
+
+    <div class="form-container hidden" id="registerForm">
+      <h2>Register</h2>
+      <form autocomplete="off" id="register-form">
+        <div class="form-group">
+          <input type="Username" id="Username" required>
+          <label>Username</label>
+        </div>
+         <div class="form-group">
+          <input type="email" id="login-email" required>
+          <label>Email</label>
+        </div>
+        <div class="form-group">
+          <input type="password" id="login-password" required>
+          <label>Password</label>
+        </div>
+        <button type="submit" id="register-btn">Register</button>
+        <div class="toggle-link">Already have an account? Login</div>
+      </form>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Cash on Delivery</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body> 
+  <nav class="navbar">
+    <div class="logo">
+      <h2>ShopEasy</h2>
+    </div>
+    <button class="hamburger" aria-label="Toggle Menu">
+      <i class="fas fa-bars"></i>
+    </button>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="category .html">Category</a></li>
+      <li><a href="help.html">Help</a></li>
+    </ul>
+  </nav>
+  <section class="cod-section">
+    <h2>Cash on Delivery Details</h2>
+    <form id="cod-form">
+      <input type="text" placeholder="Your Name" required>
+      <input type="text" placeholder="Address" required>
+      <input type="tel" placeholder="Phone Number" required>
+      <button type="submit">Place Order</button>
+    </form>
+
+    <div id="success-msg" style="display:none; color: green; margin-top: 20px;">
+      ✅ Your order has been placed successfully!
+    </div>
+  </section>
+
+  <script>
+    document.getElementById('cod-form').addEventListener('submit', function (e) {
+      e.preventDefault();
+      this.style.display = 'none';
+      document.getElementById('success-msg').style.display = 'block';
+    });
+  </script>
+</body>
+</html>

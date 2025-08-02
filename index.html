@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ShopEasy - Home</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+</head>
+<body>
+  <nav class="navbar">
+    <div class="logo">
+      <h2>ShopEasy</h2>
+    </div>
+    <button class="hamburger" aria-label="Toggle Menu">
+      <i class="fas fa-bars"></i>
+    </button>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="category .html">Category</a></li>
+      <li><a href="help.html">Help</a></li>
+    </ul>
+    <div class="nav-right">
+      <div class="search-bar">
+        <input type="text" id="searchInput" placeholder="Search products...">
+        <i class="fas fa-search"></i>
+        <div id="searchResults" class="search-results"></div>
+      </div>
+      <a href="wishlist.html" class="nav-icon"><i class="fas fa-heart"></i></a>
+      <a href="yourcart.html" class="nav-icon"><i class="fas fa-shopping-cart"></i></a>
+    </div>
+  </nav>
+  <section class="product-container">
+    <h1>Featured Products</h1>
+    <div class="product-grid">
+      <div class="product-card" data-id="home-1">
+        <img src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab" alt="T-Shirt">
+        <div class="product-info">
+          <h3>T-Shirt</h3>
+          <p>₹499</p>
+          <button class="add-to-cart">Add to Cart</button>
+           <a href="order.html" class="order-now">Order-Now</a>
+          <i class="fas fa-heart wishlist-icon" data-id="home-1" data-name="T-Shirt" data-price="499" data-image="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab"></i>
+        </div>
+      </div>
+      <div class="product-card" data-id="home-2">
+        <img src="https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf" alt="Shirt">
+        <div class="product-info">
+          <h3>Shirt</h3>
+          <p>₹899</p>
+          <button class="add-to-cart">Add to Cart</button>
+           <a href="order.html" class="order-now">Order-Now</a>
+          <i class="fas fa-heart wishlist-icon" data-id="home-2" data-name="Shirt" data-price="899" data-image="https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf"></i>
+        </div>
+      </div>
+      <div class="product-card" data-id="home-3">
+        <img src="https://images.unsplash.com/photo-1617038220319-276d3cfab638" alt="Jewellery">
+        <div class="product-info">
+          <h3>Jewellery</h3>
+          <p>₹1299</p>
+          <button class="add-to-cart">Add to Cart</button>
+           <a href="order.html" class="order-now">Order-Now</a>
+          <i class="fas fa-heart wishlist-icon" data-id="home-3" data-name="Jewellery" data-price="1299" data-image="https://images.unsplash.com/photo-1617038220319-276d3cfab638"></i>
+        </div>
+      </div>
+      <div class="product-card" data-id="home-4">
+        <img src="content://media/external/downloads/1000005306" alt="Sunglasses">
+        <div class="product-info">
+          <h3>Sunglasses</h3>
+          <p>₹769</p>
+          <button class="add-to-cart">Add to Cart</button>
+           <a href="order.html" class="order-now">Order-Now</a>
+          <i class="fas fa-heart wishlist-icon" data-id="home-4" data-name="Sunglasses" data-price="769" data-image="content://media/external/downloads/1000005306"></i>
+        </div>
+      </div>
+      <div class="product-card" data-id="home-5">
+        <img src="content://media/external/downloads/1000006241" alt="Sneakers">
+        <div class="product-info">
+          <h3>Sneakers</h3>
+          <p>₹1599</p>
+          <button class="add-to-cart">Add to Cart</button>
+          <a href="order.html" class="order-now">Order-Now</a>
+          <i class="fas fa-heart wishlist-icon" data-id="home-5" data-name="Sneakers" data-price="1599" data-image="https://images.unsplash.com/photo-1608231387042-66d1773070a5?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60"></i>
+        </div>
+      </div>
+      <div class="product-card" data-id="home-6">
+        <img src="content://media/external/downloads/1000005307" alt="Watch">
+        <div class="product-info">
+          <h3>Watch</h3>
+          <p>₹1599</p>
+          <button class="add-to-cart">Add to Cart</button>
+          <a href="order.html" class="order-now">Order-Now</a>
+          <i class="fas fa-heart wishlist-icon" data-id="home-6" data-name="Watch" data-price="1599" data-image="content://media/external/downloads/1000005307"></i>
+        </div>
+      </div>
+      <div class="product-card" data-id="home-7">
+        <img src="https://images.unsplash.com/photo-1591195853828-11db59a44f6b?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60" alt="Shorts">
+        <div class="product-info">
+          <h3>Shorts</h3>
+          <p>₹699</p>
+          <button class="add-to-cart">Add to Cart</button>
+           <a href="order.html" class="order-now">Order-Now</a>
+          <i class="fas fa-heart wishlist-icon" data-id="home-7" data-name="Shorts" data-price="699" data-image="https://images.unsplash.com/photo-1591195853828-11db59a44f6b?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60"></i>
+        </div>
+      </div>
+      <div class="product-card" data-id="home-8">
+        <img src="content://media/external/downloads/1000005311" alt="Women Kurti">
+        <div class="product-info">
+          <h3>Women Kurti</h3>
+          <p>₹599</p>
+          <button class="add-to-cart">Add to Cart</button>
+         <a href="order.html" class="order-now">Order-Now</a>
+          <i class="fas fa-heart wishlist-icon" data-id="home-8" data-name="Women Kurti" data-price="599" data-image="content://media/external/downloads/1000005311"></i>
+        </div>
+      </div>
+    </div>
+  </section>
+  <script src="script.js"></script>
+</body>
+</html>
