@@ -13,16 +13,17 @@
     <button class="hamburger" aria-label="Toggle Menu"><i class="fas fa-bars"></i></button>
     <ul class="nav-links">
       <li><a href="index.html">Home</a></li>
-      <li><a href="category .html">Category</a></li>
+      <li><a href="category.html">Category</a></li>
       <li><a href="help.html">Help</a></li>
-    </ul>
+        </ul>
   </nav>
   <h1>QR Payment</h1>
   <div id="qr-section">
     <p>Scan the QR code to confirm payment:</p>
-    <img id="qr-code" src="https://i.supaimg.com/7ec51b0e-2434-4400-86d7-e82de9db0f0a.png" alt="Payment QR Code">
+    <img id="scan-qr" src="https://i.supaimg.com/7ec51b0e-2434-4400-86d7-e82de9db0f0a.png" alt="Payment QR Code">
     <input type="file" id="qr-upload" accept="image/*" style="display: none;">
     <button id="scan-qr">Scan QR Code</button>
+    <a href="statement.html" id="statement" style="display: none;">View Statement</a>
   </div>
   <button id="confirm-payment">Confirm Payment</button>
   <div id="success-msg" style="display: none;">Payment successful!</div>
