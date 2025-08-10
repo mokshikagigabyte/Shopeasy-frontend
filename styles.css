@@ -975,7 +975,7 @@ body {
 
 .auth-page .form-container h2 {
   text-align: center;
-  color: #fff;
+  color: aqua;
   margin-bottom: 30px;
 }
 
@@ -990,7 +990,7 @@ body {
   background: transparent;
   border: none;
   border-bottom: 2px solid #aaa;
-  color: #fff;
+  color: aqua;
   font-size: 16px;
   outline: none;
   transition: 0.3s;
