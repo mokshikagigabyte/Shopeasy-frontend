@@ -52,7 +52,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Owner authentication for statement.html
   if (currentPage === 'statement.html') {
-    const ownerEmail = 'owner@example.com';
+    const ownerEmail = 'mokshika470@gmai.com'com'maicom'macom'mcom'com'com';
     const ownerPassword = 'admin123';
     const authSection = getElement('auth-section');
     const statementSection = getElement('statement-section');
