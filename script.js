@@ -1,3 +1,6 @@
+// Backend URL
+const BACKEND_URL = 'https://shopeasy-backend-5.onrender.com';
+
 // Helper: Get simulated JWT token from localStorage
 const getToken = () => localStorage.getItem('token');
 
@@ -24,6 +27,7 @@ function toggleForm() {
   if (loginForm && registerForm) {
     loginForm.classList.toggle('hidden');
     registerForm.classList.toggle('hidden');
+    console.log('Toggled forms:', loginForm.classList.contains('hidden') ? 'Register form shown' : 'Login form shown');
   }
 }
 
@@ -117,7 +121,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const loginFormElement = getElement('login-form');
   const registerFormElement = getElement('register-form');
   if (loginFormElement) {
-    loginFormElement.addEventListener('submit', (e) => {
+    loginFormElement.addEventListener('submit', async (e) => {
       e.preventDefault();
       const emailInput = getElement('login-email');
       const passwordInput = getElement('login-password');
@@ -128,20 +132,29 @@ document.addEventListener('DOMContentLoaded', () => {
         console.error('Login failed: Missing email or password');
         return;
       }
-      const users = JSON.parse(localStorage.getItem('users') || '[]');
-      const user = users.find(u => u.email === email && u.password === password);
-      if (user) {
-        localStorage.setItem('token', `simulated-token-${email}`);
-        console.log('Login successful:', email);
-        window.location.href = 'home.html';
-      } else {
-        alert('Invalid email or password');
-        console.error('Login failed: Invalid credentials');
+      try {
+        const response = await fetch(`${BACKEND_URL}/api/login`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password })
+        });
+        const data = await response.json();
+        if (response.ok && data.token) {
+          localStorage.setItem('token', data.token);
+          console.log('Login successful:', email);
+          window.location.href = 'home.html';
+        } else {
+          alert(data.message || 'Invalid email or password');
+          console.error('Login failed:', data.message || 'Invalid credentials');
+        }
+      } catch (error) {
+        alert('Error connecting to server');
+        console.error('Login error:', error);
       }
     });
   }
   if (registerFormElement) {
-    registerFormElement.addEventListener('submit', (e) => {
+    registerFormElement.addEventListener('submit', async (e) => {
       e.preventDefault();
       const usernameInput = getElement('register-username');
       const emailInput = getElement('register-email');
@@ -154,17 +167,25 @@ document.addEventListener('DOMContentLoaded', () => {
         console.error('Registration failed: Missing fields');
         return;
       }
-      const users = JSON.parse(localStorage.getItem('users') || '[]');
-      if (users.some(u => u.email === email)) {
-        alert('Email already registered');
-        console.error('Registration failed: Email exists');
-        return;
+      try {
+        const response = await fetch(`${BACKEND_URL}/api/register`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username, email, password })
+        });
+        const data = await response.json();
+        if (response.ok && data.token) {
+          localStorage.setItem('token', data.token);
+          console.log('Registration successful:', email);
+          window.location.href = 'home.html';
+        } else {
+          alert(data.message || 'Email already registered');
+          console.error('Registration failed:', data.message || 'Email exists');
+        }
+      } catch (error) {
+        alert('Error connecting to server');
+        console.error('Registration error:', error);
       }
-      users.push({ username, email, password });
-      localStorage.setItem('users', JSON.stringify(users));
-      localStorage.setItem('token', `simulated-token-${email}`);
-      console.log('Registration successful:', email);
-      window.location.href = 'home.html';
     });
   }
 
@@ -231,7 +252,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <div class="product-info">
               <h3>${product.name}</h3>
               <p>₹${product.price}</p>
-              <button class="add-to-cart" ${isInCart ? 'disabled' : ''}>${isInCart ? 'In Cart' : 'Add to Cart'}</button>
+              <button class="add-to-cart" ${ isInCart ? 'disabled' : '' }>${ isInCart ? 'In Cart' : 'Add to Cart' }</button>
               <a href="#" class="order-now">Order Now</a>
               <i class="fas fa-heart wishlist-icon${wishlist.some(item => item.id === product.id) ? ' active' : ''}" 
                  data-id="${product.id}" 
@@ -763,7 +784,11 @@ document.addEventListener('DOMContentLoaded', () => {
       loadProducts();
       const productContainers = document.querySelectorAll('.product-container');
       if (productContainers.length && ['men.html', 'category.html'].includes(currentPage)) {
-        productContainers.forEach(container => container.classList.add('active'));
+        productContainers.forEach(container => {
+          container.classList.add('active');
+          const productGrid = container.querySelector('.product-grid');
+          if (productGrid) productGrid.style.display = 'grid';
+        });
       }
     } else {
       window.location.href = 'index.html';
