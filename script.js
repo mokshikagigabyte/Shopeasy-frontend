@@ -22,8 +22,8 @@ const generateUniqueId = () => `prod-${Date.now()}-${Math.random().toString(36).
 
 // Toggle between login and register forms
 function toggleForm() {
-  const loginForm = getElement('loginForm');
-  const registerForm = getElement('registerForm');
+  const loginForm = getElement('login-form');
+  const registerForm = getElement('register-form');
   if (loginForm && registerForm) {
     loginForm.classList.toggle('hidden');
     registerForm.classList.toggle('hidden');
@@ -52,7 +52,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Owner authentication for statement.html
   if (currentPage === 'statement.html') {
-    const ownerEmail = 'mokshika470@gmai.com'com'maicom'macom'mcom'com'com';
+    const ownerEmail = 'mokshika470@gmail.com';
     const ownerPassword = 'admin123';
     const authSection = getElement('auth-section');
     const statementSection = getElement('statement-section');
@@ -796,7 +796,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   if (currentPage === 'wishlist.html') renderWishlist();
   if (currentPage === 'yourcart.html') renderCart();
-  if (currentPage === 'statement.html' && getUserEmail() === 'owner@example.com' && localStorage.getItem('ownerAuthenticated') === 'true') {
+  if (currentPage === 'statement.html' && getUserEmail() === 'mokshika470@gmail.com' && localStorage.getItem('ownerAuthenticated') === 'true') {
     renderStatement();
   }
 });
