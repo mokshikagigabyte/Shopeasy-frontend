@@ -1,51 +1,174 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Elegant Login/Register Form</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ShopEasy - Home</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
 </head>
 <body>
-  <div class="auth-page" id="auth-section">
-    <div class="form-container" id="loginForm">
-      <h2>Login</h2>
-      <form autocomplete="off" id="login-form">
-        <div class="form-group">
-          <input type="email" id="login-email" required>
-          <label>Email</label>
-        </div>
-        <div class="form-group">
-          <input type="password" id="login-password" required>
-          <label>Password</label>
-        </div>
-        <button type="submit" id="index-btn">Login</button>
-        <div class="toggle-link">Don't have an account? <a href="#" onclick="toggleForm()">Register</a></div>
-      </form>
-    </div>
 
-    <div class="form-container hidden" id="registerForm">
-      <h2>Register</h2>
-      <form autocomplete="off" id="register-form">
-        <div class="form-group">
-          <input type="text" id="register-username" required>
-          <label>Username</label>
-        </div>
-        <div class="form-group">
-          <input type="email" id="register-email" required>
-          <label>Email</label>
-        </div>
-        <div class="form-group">
-          <input type="password" id="register-password" required>
-          <label>Password</label>
-        </div>
-        <button type="submit" id="register-btn">Register</button>
-        <div class="toggle-link">Already have an account? <a href="#" onclick="toggleForm()">Login</a></div>
-      </form>
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="logo">
+      <h2>ShopEasy</h2>
     </div>
-  </div>
+    <button class="hamburger" aria-label="Toggle Menu">
+      <i class="fas fa-bars"></i>
+    </button>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="category.html">Category</a></li>
+      <li><a href="help.html">Help</a></li>
+    </ul>
+    <div class="nav-right">
+      <div class="search-bar">
+        <input type="text" id="searchInput" placeholder="Search products...">
+        <i class="fas fa-search"></i>
+        <div id="searchResults" class="search-results"></div>
+      </div>
+      <a href="wishlist.html" class="nav-icon"><i class="fas fa-heart"></i></a>
+      <a href="yourcart.html" class="nav-icon"><i class="fas fa-shopping-cart"></i></a>
+    </div>
+  </nav>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jsQR/1.4.0/jsQR.min.js"></script>
+  <!-- Featured Products -->
+  <section class="product-container">
+    <h1>Featured Products</h1>
+    <div class="product-grid">
+
+      <!-- Product Card 1 -->
+      <div class="product-card"
+           data-id="home-1"
+           data-name="T-Shirt"
+           data-price="499"
+           data-image="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab">
+        <img src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab" alt="T-Shirt">
+        <div class="product-info">
+          <h3>T-Shirt</h3>
+          <p>₹499</p>
+          <button class="add-to-cart">Add to Cart</button>
+          <a href="order.html" class="order-now">Order-Now</a>
+          <i class="fas fa-heart wishlist-icon"></i>
+        </div>
+      </div>
+
+      <!-- Product Card 2 -->
+      <div class="product-card"
+           data-id="home-2"
+           data-name="Shirt"
+           data-price="899"
+           data-image="https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf">
+        <img src="https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf" alt="Shirt">
+        <div class="product-info">
+          <h3>Shirt</h3>
+          <p>₹899</p>
+          <button class="add-to-cart">Add to Cart</button>
+          <a href="order.html" class="order-now">Order-Now</a>
+          <i class="fas fa-heart wishlist-icon"></i>
+        </div>
+      </div>
+
+      <!-- Product Card 3 -->
+      <div class="product-card"
+           data-id="home-3"
+           data-name="Jewellery"
+           data-price="1299"
+           data-image="https://images.unsplash.com/photo-1617038220319-276d3cfab638">
+        <img src="https://images.unsplash.com/photo-1617038220319-276d3cfab638" alt="Jewellery">
+        <div class="product-info">
+          <h3>Jewellery</h3>
+          <p>₹1299</p>
+          <button class="add-to-cart">Add to Cart</button>
+          <a href="order.html" class="order-now">Order-Now</a>
+          <i class="fas fa-heart wishlist-icon"></i>
+        </div>
+      </div>
+
+      <!-- Product Card 4 -->
+      <div class="product-card"
+           data-id="home-4"
+           data-name="Sunglasses"
+           data-price="769"
+           data-image="https://images.unsplash.com/photo-1504593811423-6dd665756598">
+        <img src="https://images.unsplash.com/photo-1504593811423-6dd665756598" alt="Sunglasses">
+        <div class="product-info">
+          <h3>Sunglasses</h3>
+          <p>₹769</p>
+          <button class="add-to-cart">Add to Cart</button>
+          <a href="order.html" class="order-now">Order-Now</a>
+          <i class="fas fa-heart wishlist-icon"></i>
+        </div>
+      </div>
+
+      <!-- Product Card 5 -->
+      <div class="product-card"
+           data-id="home-5"
+           data-name="Sneakers"
+           data-price="1599"
+           data-image="https://images.unsplash.com/photo-1608231387042-66d1773070a5?ixlib=rb-4.0.3">
+        <img src="https://images.unsplash.com/photo-1608231387042-66d1773070a5?ixlib=rb-4.0.3" alt="Sneakers">
+        <div class="product-info">
+          <h3>Sneakers</h3>
+          <p>₹1599</p>
+          <button class="add-to-cart">Add to Cart</button>
+          <a href="order.html" class="order-now">Order-Now</a>
+          <i class="fas fa-heart wishlist-icon"></i>
+        </div>
+      </div>
+
+      <!-- Product Card 6 -->
+      <div class="product-card"
+           data-id="home-6"
+           data-name="Watch"
+           data-price="1599"
+           data-image="https://images.unsplash.com/photo-1513116476489-7635e79feb27">
+        <img src="https://images.unsplash.com/photo-1513116476489-7635e79feb27" alt="Watch">
+        <div class="product-info">
+          <h3>Watch</h3>
+          <p>₹1599</p>
+          <button class="add-to-cart">Add to Cart</button>
+          <a href="order.html" class="order-now">Order-Now</a>
+          <i class="fas fa-heart wishlist-icon"></i>
+        </div>
+      </div>
+
+      <!-- Product Card 7 -->
+      <div class="product-card"
+           data-id="home-7"
+           data-name="Shorts"
+           data-price="699"
+           data-image="https://images.unsplash.com/photo-1591195853828-11db59a44f6b?ixlib=rb-4.0.3">
+        <img src="https://images.unsplash.com/photo-1591195853828-11db59a44f6b?ixlib=rb-4.0.3" alt="Shorts">
+        <div class="product-info">
+          <h3>Shorts</h3>
+          <p>₹699</p>
+          <button class="add-to-cart">Add to Cart</button>
+          <a href="order.html" class="order-now">Order-Now</a>
+          <i class="fas fa-heart wishlist-icon"></i>
+        </div>
+      </div>
+
+      <!-- Product Card 8 -->
+      <div class="product-card"
+           data-id="home-8"
+           data-name="Women Kurti"
+           data-price="599"
+           data-image="https://images.unsplash.com/photo-1541099649105-f69ad21f3246">
+        <img src="https://images.unsplash.com/photo-1541099649105-f69ad21f3246" alt="Women Kurti">
+        <div class="product-info">
+          <h3>Women Kurti</h3>
+          <p>₹599</p>
+          <button class="add-to-cart">Add to Cart</button>
+          <a href="order.html" class="order-now">Order-Now</a>
+          <i class="fas fa-heart wishlist-icon"></i>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
   <script src="script.js"></script>
 </body>
 </html>
