@@ -1,14 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ShopEasy - Wishlist</title>
-  <link rel="stylesheet" href="styles.css" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <meta charset="UTF-8">
+  <title>Women - ShopEasy</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
-<nav class="navbar">
+
+  <!-- Navbar -->
+  <nav class="navbar">
     <div class="logo">
       <h2>ShopEasy</h2>
     </div>
@@ -17,16 +18,172 @@
     </button>
     <ul class="nav-links">
       <li><a href="index.html">Home</a></li>
-      <li><a href="category .html">Category</a></li>
-      <li><a href="help.html" class="active">Help</a></li>
+      <li><a href="category.html">Category</a></li>
+      <li><a href="help.html">Help</a></li>
     </ul>
+    <div class="nav-right">
+      <div class="search-bar">
+        <input type="text" id="searchInput" placeholder="Search products...">
+        <i class="fas fa-search"></i>
+        <div id="searchResults" class="search-results"></div>
+      </div>
+      <a href="wishlist.html" class="nav-icon"><i class="fas fa-heart"></i></a>
       <a href="yourcart.html" class="nav-icon"><i class="fas fa-shopping-cart"></i></a>
     </div>
   </nav>
-  <div class="wishlist-container">
-    <h1>Your Wishlist</h1>
-    <div class="wishlist-grid" id="wishlistGrid"></div>
+
+  <!-- Dress Section -->
+  <div class="product-container">
+    <h1 class="section-title" style="border:1px solid black; border-radius: 12px;">Dress Section</h1>
+    <div class="product-grid">
+
+      <!-- Floral Dress -->
+      <div class="product-card"
+           data-id="women-1"
+           data-name="Floral Dress"
+           data-price="1299"
+           data-image="https://images.pexels.com/photos/3689007/pexels-photo-3689007.jpeg">
+        <img src="https://images.pexels.com/photos/3689007/pexels-photo-3689007.jpeg" alt="Floral Dress">
+        <div class="product-info">
+          <h3>Floral Dress</h3>
+          <p>₹1299</p>
+          <button class="add-to-cart">Add to Cart</button>
+          <a href="order.html" class="order-now">Order-Now</a>
+          <i class="fas fa-heart wishlist-icon"></i>
+        </div>
+      </div>
+
+      <!-- Summer Top -->
+      <div class="product-card"
+           data-id="women-2"
+           data-name="Summer Top"
+           data-price="799"
+           data-image="https://images.pexels.com/photos/3766177/pexels-photo-3766177.jpeg">
+        <img src="https://images.pexels.com/photos/3766177/pexels-photo-3766177.jpeg" alt="Summer Top">
+        <div class="product-info">
+          <h3>Summer Top</h3>
+          <p>₹799</p>
+          <button class="add-to-cart">Add to Cart</button>
+          <a href="order.html" class="order-now">Order-Now</a>
+          <i class="fas fa-heart wishlist-icon"></i>
+        </div>
+      </div>
+
+      <!-- Maxi Dress -->
+      <div class="product-card"
+           data-id="women-3"
+           data-name="Maxi Dress"
+           data-price="1499"
+           data-image="https://images.pexels.com/photos/2983464/pexels-photo-2983464.jpeg">
+        <img src="https://images.pexels.com/photos/2983464/pexels-photo-2983464.jpeg" alt="Maxi Dress">
+        <div class="product-info">
+          <h3>Maxi Dress</h3>
+          <p>₹1499</p>
+          <button class="add-to-cart">Add to Cart</button>
+          <a href="order.html" class="order-now">Order-Now</a>
+          <i class="fas fa-heart wishlist-icon"></i>
+        </div>
+      </div>
+
+    </div>
   </div>
+
+  <!-- Tops Section -->
+  <div class="product-container">
+    <h1 class="section-title" style="border:1px solid black; border-radius: 12px;">Tops Section</h1>
+    <div class="product-grid">
+
+      <!-- Casual Top -->
+      <div class="product-card"
+           data-id="women-4"
+           data-name="Casual Top"
+           data-price="599"
+           data-image="https://images.pexels.com/photos/2529148/pexels-photo-2529148.jpeg">
+        <img src="https://images.pexels.com/photos/2529148/pexels-photo-2529148.jpeg" alt="Casual Top">
+        <div class="product-info">
+          <h3>Casual Top</h3>
+          <p>₹599</p>
+          <button class="add-to-cart">Add to Cart</button>
+          <a href="order.html" class="order-now">Order-Now</a>
+          <i class="fas fa-heart wishlist-icon"></i>
+        </div>
+      </div>
+
+      <!-- Off Shoulder Top -->
+      <div class="product-card"
+           data-id="women-5"
+           data-name="Off Shoulder Top"
+           data-price="899"
+           data-image="https://images.pexels.com/photos/2326981/pexels-photo-2326981.jpeg">
+        <img src="https://images.pexels.com/photos/2326981/pexels-photo-2326981.jpeg" alt="Off Shoulder Top">
+        <div class="product-info">
+          <h3>Off Shoulder Top</h3>
+          <p>₹899</p>
+          <button class="add-to-cart">Add to Cart</button>
+          <a href="order.html" class="order-now">Order-Now</a>
+          <i class="fas fa-heart wishlist-icon"></i>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Shoes & Accessories Section -->
+  <div class="product-container">
+    <h1 class="section-title" style="border:1px solid black; border-radius: 12px;">Shoes & Accessories</h1>
+    <div class="product-grid">
+
+      <!-- Heels -->
+      <div class="product-card"
+           data-id="women-6"
+           data-name="Heels"
+           data-price="1699"
+           data-image="https://images.pexels.com/photos/298863/pexels-photo-298863.jpeg">
+        <img src="https://images.pexels.com/photos/298863/pexels-photo-298863.jpeg" alt="Heels">
+        <div class="product-info">
+          <h3>Heels</h3>
+          <p>₹1699</p>
+          <button class="add-to-cart">Add to Cart</button>
+          <a href="order.html" class="order-now">Order-Now</a>
+          <i class="fas fa-heart wishlist-icon"></i>
+        </div>
+      </div>
+
+      <!-- Tote Bag -->
+      <div class="product-card"
+           data-id="women-7"
+           data-name="Tote Bag"
+           data-price="799"
+           data-image="https://images.pexels.com/photos/5077043/pexels-photo-5077043.jpeg">
+        <img src="https://images.pexels.com/photos/5077043/pexels-photo-5077043.jpeg" alt="Tote Bag">
+        <div class="product-info">
+          <h3>Tote Bag</h3>
+          <p>₹799</p>
+          <button class="add-to-cart">Add to Cart</button>
+          <a href="order.html" class="order-now">Order-Now</a>
+          <i class="fas fa-heart wishlist-icon"></i>
+        </div>
+      </div>
+
+      <!-- Sunglasses -->
+      <div class="product-card"
+           data-id="women-8"
+           data-name="Sunglasses"
+           data-price="899"
+           data-image="https://images.pexels.com/photos/46710/pexels-photo-46710.jpeg">
+        <img src="https://images.pexels.com/photos/46710/pexels-photo-46710.jpeg" alt="Sunglasses">
+        <div class="product-info">
+          <h3>Sunglasses</h3>
+          <p>₹899</p>
+          <button class="add-to-cart">Add to Cart</button>
+          <a href="order.html" class="order-now">Order-Now</a>
+          <i class="fas fa-heart wishlist-icon"></i>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
   <script src="script.js"></script>
 </body>
 </html>

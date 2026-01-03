@@ -1,460 +1,758 @@
 /* ==========================================================
-   GLOBAL DESIGN SYSTEM VARIABLES
+   GLOBAL DESIGN SYSTEM (ROOT VARIABLES)
 ========================================================== */
 :root {
-  /* Colors */
-  --primary-color: #ff6b6b;         /* Accent / buttons / highlights */
-  --secondary-color: #ff9a6b;       /* Gradients / accents */
-  --background-color: #f7f8fc;      /* Main page background */
-  --card-background: #ffffff;       /* Cards and forms */
-  --text-color: #333333;            /* Primary text */
-  --muted-text: #777777;            /* Secondary text */
-  --success-color: #4caf50;
-  --error-color: #f44336;
-  --shadow-color: rgba(0,0,0,0.12);
-  --glass-bg: rgba(255,255,255,0.25);
+  /* Brand Colors */
+  --primary: #6c63ff;
+  --secondary: #ff7a18;
+  --accent: #00c9a7;
+  --danger: #ff4d4f;
+  --success: #22c55e;
+
+  /* Neutrals */
+  --dark: #1f2933;
+  --gray-dark: #374151;
+  --gray: #6b7280;
+  --gray-light: #e5e7eb;
+  --white: #ffffff;
+  --bg: #f9fafb;
+
+  /* Gradients */
+  --gradient-main: linear-gradient(135deg, #6c63ff, #ff7a18);
+  --gradient-soft: linear-gradient(135deg, #eef2ff, #fdf2e9);
 
   /* Typography */
-  --font-primary: 'Poppins', sans-serif;
-  --font-size-base: 16px;
-  --font-size-small: 14px;
-  --font-size-large: 20px;
+  --font-main: 'Poppins', 'Inter', system-ui, sans-serif;
 
-  /* Spacing */
-  --space-xs: 4px;
-  --space-sm: 8px;
-  --space-md: 16px;
-  --space-lg: 24px;
-  --space-xl: 32px;
+  /* Radius & Shadow */
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 22px;
 
-  /* Border Radius */
-  --radius-sm: 6px;
-  --radius-md: 12px;
-  --radius-lg: 20px;
+  --shadow-sm: 0 4px 12px rgba(0,0,0,0.08);
+  --shadow-md: 0 12px 30px rgba(0,0,0,0.12);
+  --shadow-lg: 0 25px 60px rgba(0,0,0,0.18);
 
-  /* Transition */
-  --transition: all 0.3s ease;
+  /* Animation */
+  --transition-fast: 0.3s ease;
+  --transition-slow: 0.6s ease;
 }
 
 /* ==========================================================
-   GLOBAL ELEMENTS
+   RESET & BASE STYLES
 ========================================================== */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: var(--font-primary);
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  background-color: var(--background-color);
-  color: var(--text-color);
-  font-size: var(--font-size-base);
-  line-height: 1.5;
-  overflow-x: hidden;
+  font-family: var(--font-main);
+  background: var(--bg);
+  color: var(--dark);
+  line-height: 1.6;
+}
+
+img {
+  max-width: 100%;
+  display: block;
 }
 
 a {
   text-decoration: none;
-  color: var(--primary-color);
-  transition: var(--transition);
+  color: inherit;
 }
 
-a:hover {
-  color: var(--secondary-color);
-}
-
-h1, h2, h3, h4, h5, h6 {
-  font-weight: 600;
-  color: var(--text-color);
+button {
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
 }
 
 /* ==========================================================
-   NAVBAR
+   NAVBAR (ALL PAGES)
 ========================================================== */
 .navbar {
-  width: 100%;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--white);
+  box-shadow: var(--shadow-sm);
+  padding: 14px 24px;
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  padding: var(--space-md) var(--space-lg);
-  background-color: #fff;
-  box-shadow: 0 4px 10px var(--shadow-color);
+  justify-content: space-between;
+}
+
+.logo h2 {
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.nav-links {
+  display: flex;
+  gap: 24px;
+  list-style: none;
+}
+
+.nav-links a {
+  font-weight: 500;
+  color: var(--gray-dark);
+  position: relative;
+}
+
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 2px;
+  background: var(--primary);
+  left: 0;
+  bottom: -6px;
+  transition: var(--transition-fast);
+}
+
+.nav-links a:hover::after {
+  width: 100%;
+}
+
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.nav-icon {
+  font-size: 18px;
+  color: var(--gray-dark);
+  transition: var(--transition-fast);
+}
+
+.nav-icon:hover {
+  color: var(--primary);
+  transform: scale(1.1);
+}
+
+/* Hamburger */
+.hamburger {
+  display: none;
+  background: none;
+  font-size: 22px;
+}
+
+/* ==========================================================
+   SEARCH BAR
+========================================================== */
+.search-bar {
+  position: relative;
+}
+
+.search-bar input {
+  padding: 10px 38px 10px 14px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--gray-light);
+  outline: none;
+}
+
+.search-bar i {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--gray);
+}
+
+.search-results {
+  position: absolute;
+  background: var(--white);
+  width: 100%;
+  top: 110%;
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-sm);
+  display: none;
+}
+
+.search-item {
+  padding: 10px;
+  cursor: pointer;
+}
+
+.search-item:hover {
+  background: var(--gradient-soft);
+}
+
+/* ==========================================================
+   PRODUCT GRID & CARDS
+========================================================== */
+.product-container {
+  padding: 40px 24px;
+}
+
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: 24px;
+}
+
+.product-card {
+  background: var(--white);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+  transition: var(--transition-fast);
+  position: relative;
+}
+
+.product-card:hover {
+  transform: translateY(-8px);
+  box-shadow: var(--shadow-md);
+}
+
+.product-info {
+  padding: 16px;
+}
+
+.product-info h3 {
+  font-size: 18px;
+  margin-bottom: 6px;
+}
+
+.product-info p {
+  color: var(--gray);
+  margin-bottom: 10px;
+}
+
+.add-to-cart,
+.order-now {
+  width: 100%;
+  padding: 10px;
+  border-radius: var(--radius-sm);
+  background: var(--gradient-main);
+  color: var(--white);
+  margin-bottom: 8px;
+  transition: var(--transition-fast);
+}
+
+.add-to-cart:hover {
+  opacity: 0.9;
+  transform: translateY(-2px);
+}
+
+.wishlist-icon {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  color: var(--gray);
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.wishlist-icon.active {
+  color: var(--danger);
+}
+
+/* ==========================================================
+   CART & WISHLIST
+========================================================== */
+.cart-card,
+.wishlist-card {
+  background: var(--white);
+  padding: 16px;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  margin-bottom: 16px;
+}
+
+.cart-card button,
+.wishlist-card button {
+  background: var(--primary);
+  color: var(--white);
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+  margin-top: 8px;
+}
+
+/* ==========================================================
+   HELP / FEEDBACK
+========================================================== */
+.feedback-section {
+  max-width: 600px;
+  margin: 60px auto;
+  background: var(--white);
+  padding: 30px;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+}
+
+.feedback-form input,
+.feedback-form textarea {
+  width: 100%;
+  padding: 12px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--gray-light);
+  margin-bottom: 14px;
+}
+
+.feedback-form button {
+  background: var(--gradient-main);
+  padding: 12px;
+  width: 100%;
+  border-radius: var(--radius-sm);
+  color: var(--white);
+}
+
+/* ==========================================================
+   ⭐ LOGIN & REGISTER – PREMIUM DESIGN ⭐
+========================================================== */
+body:has(#login-form) {
+  background: linear-gradient(120deg, #6c63ff, #ff7a18);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.8s ease;
+}
+
+#login-form,
+#register-form {
+  background: rgba(255,255,255,0.2);
+  backdrop-filter: blur(18px);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  padding: 40px;
+  width: 100%;
+  max-width: 380px;
+  animation: slideUp 0.8s ease;
+}
+
+#login-form input,
+#register-form input {
+  width: 100%;
+  padding: 14px;
+  background: rgba(255,255,255,0.9);
+  border-radius: var(--radius-sm);
+  border: none;
+  margin-bottom: 16px;
+  font-size: 15px;
+}
+
+#login-form button,
+#register-form button {
+  width: 100%;
+  padding: 14px;
+  background: var(--gradient-main);
+  color: var(--white);
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  transition: var(--transition-fast);
+}
+
+#login-form button:hover,
+#register-form button:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md);
+}
+
+/* ==========================================================
+   ANIMATIONS
+========================================================== */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { transform: translateY(40px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+/* ==========================================================
+   RESPONSIVE
+========================================================== */
+@media (max-width: 768px) {
+  .nav-links {
+    display: none;
+    flex-direction: column;
+    background: var(--white);
+    position: absolute;
+    top: 60px;
+    right: 20px;
+    padding: 20px;
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-md);
+  }/* ==========================================================
+   🌈 GLOBAL DESIGN SYSTEM VARIABLES
+========================================================== */
+:root {
+  /* Brand Colors */
+  --primary: #ff6b6b;
+  --secondary: #ff9a6b;
+  --accent: #6c63ff;
+
+  /* UI Colors */
+  --bg: #f7f8fc;
+  --card: #ffffff;
+  --text: #2e2e2e;
+  --muted: #777;
+  --success: #4caf50;
+  --error: #f44336;
+
+  /* Effects */
+  --glass: rgba(255, 255, 255, 0.25);
+  --shadow-sm: 0 4px 12px rgba(0,0,0,0.08);
+  --shadow-md: 0 12px 30px rgba(0,0,0,0.15);
+  --shadow-lg: 0 25px 60px rgba(0,0,0,0.2);
+
+  /* Typography */
+  --font: 'Poppins', system-ui, sans-serif;
+
+  /* Radius */
+  --r-sm: 6px;
+  --r-md: 12px;
+  --r-lg: 20px;
+
+  /* Spacing */
+  --s-xs: 6px;
+  --s-sm: 10px;
+  --s-md: 18px;
+  --s-lg: 28px;
+  --s-xl: 40px;
+
+  /* Motion */
+  --fast: 0.3s ease;
+  --slow: 0.6s ease;
+}
+
+/* ==========================================================
+   🔄 RESET & BASE
+========================================================== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: var(--font);
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+}
+
+img {
+  width: 100%;
+  display: block;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* ==========================================================
+   🧭 NAVBAR
+========================================================== */
+.navbar {
+  background: var(--card);
+  padding: var(--s-md) var(--s-lg);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: var(--shadow-sm);
   position: sticky;
   top: 0;
   z-index: 100;
 }
 
-.navbar .logo h2 {
-  color: var(--primary-color);
-  font-size: 1.5rem;
+.logo h2 {
+  color: var(--primary);
+  font-weight: 700;
 }
 
 .nav-links {
-  display: flex;
-  gap: var(--space-lg);
   list-style: none;
-}
-
-.nav-links li a {
-  font-weight: 500;
-  transition: var(--transition);
-}
-
-.nav-links li a:hover {
-  color: var(--secondary-color);
-}
-
-/* ==========================================================
-   BUTTONS
-========================================================== */
-button {
-  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-  border: none;
-  color: #fff;
-  padding: var(--space-sm) var(--space-lg);
-  border-radius: var(--radius-md);
-  font-weight: 600;
-  cursor: pointer;
-  transition: var(--transition);
-}
-
-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px var(--shadow-color);
-}
-
-button:active {
-  transform: translateY(0);
-  box-shadow: none;
-}
-
-/* ==========================================================
-   CARDS
-========================================================== */
-.card {
-  background-color: var(--card-background);
-  border-radius: var(--radius-lg);
-  box-shadow: 0 10px 20px var(--shadow-color);
-  overflow: hidden;
-  transition: var(--transition);
-}
-
-.card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 15px 30px var(--shadow-color);
-}
-
-.card img {
-  width: 100%;
-  display: block;
-  object-fit: cover;
-}
-
-.card-content {
-  padding: var(--space-md);
-}
-
-/* ==========================================================
-   FORMS
-========================================================== */
-input, select, textarea {
-  width: 100%;
-  padding: var(--space-sm);
-  margin-bottom: var(--space-md);
-  border: 1px solid #ddd;
-  border-radius: var(--radius-sm);
-  font-size: var(--font-size-base);
-  outline: none;
-  transition: var(--transition);
-}
-
-input:focus, select:focus, textarea:focus {
-  border-color: var(--primary-color);
-  box-shadow: 0 0 8px rgba(255,107,107,0.3);
-}
-
-/* ==========================================================
-   TABLES (for Cart / Statements)
-========================================================== */
-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-bottom: var(--space-lg);
-}
-
-th, td {
-  padding: var(--space-sm);
-  border-bottom: 1px solid #eee;
-  text-align: left;
-}
-
-/* ==========================================================
-   LOGIN & REGISTRATION PAGE (PREMIUM DESIGN)
-========================================================== */
-.login-page {
   display: flex;
-  min-height: 100vh;
-  background: linear-gradient(120deg, #ff9a9e, #fad0c4);
-  justify-content: center;
-  align-items: center;
-  font-family: var(--font-primary);
-  overflow: hidden;
+  gap: var(--s-lg);
+}
+
+.nav-links a {
+  font-weight: 500;
   position: relative;
 }
 
-/* Split layout: form + visual */
-.login-page::before {
+.nav-links a::after {
   content: '';
   position: absolute;
-  width: 50%;
-  height: 100%;
+  bottom: -6px;
   left: 0;
-  top: 0;
-  background: url('https://images.unsplash.com/photo-1609945202060-0f446d6dbffd?auto=format&fit=crop&w=800&q=80') center/cover no-repeat;
-  filter: blur(5px) brightness(0.7);
-  z-index: 1;
-  transition: var(--transition);
+  width: 0;
+  height: 2px;
+  background: var(--primary);
+  transition: var(--fast);
 }
 
-.login-container {
-  position: relative;
-  z-index: 2;
-  display: flex;
-  background: rgba(255, 255, 255, 0.15);
-  backdrop-filter: blur(15px);
-  border-radius: var(--radius-lg);
-  box-shadow: 0 15px 30px rgba(0,0,0,0.2);
-  overflow: hidden;
-  max-width: 900px;
-  width: 90%;
+.nav-links a:hover::after {
+  width: 100%;
 }
 
-/* Form section */
-.login-form-section {
-  flex: 1;
-  padding: var(--space-xl);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
-.login-form-section h2 {
-  font-size: 2rem;
-  color: #fff;
-  margin-bottom: var(--space-lg);
-  text-shadow: 1px 1px 5px rgba(0,0,0,0.4);
-}
-
-.login-form-section form {
-  display: flex;
-  flex-direction: column;
-}
-
-.login-form-section label {
-  color: #fff;
-  margin-bottom: var(--space-xs);
-  font-weight: 500;
-}
-
-.login-form-section input {
-  padding: var(--space-sm);
-  margin-bottom: var(--space-md);
-  border: none;
-  border-radius: var(--radius-sm);
-  outline: none;
-  font-size: 1rem;
-  background: rgba(255,255,255,0.2);
-  color: #fff;
-  backdrop-filter: blur(5px);
-  transition: var(--transition);
-}
-
-.login-form-section input::placeholder {
-  color: rgba(255,255,255,0.7);
-}
-
-.login-form-section input:focus {
-  background: rgba(255,255,255,0.3);
-  box-shadow: 0 0 15px rgba(255,255,255,0.5);
-}
-
-.login-form-section button {
-  margin-top: var(--space-md);
-  font-size: 1.1rem;
-}
-
-.login-form-section .toggle-link {
-  color: #fff;
-  text-align: center;
-  margin-top: var(--space-md);
-  cursor: pointer;
-  transition: var(--transition);
-}
-
-.login-form-section .toggle-link:hover {
-  color: var(--secondary-color);
-  text-decoration: underline;
-}
-
-/* Custom checkbox */
-.checkbox-container {
+.nav-right {
   display: flex;
   align-items: center;
-  gap: var(--space-sm);
-  margin-bottom: var(--space-md);
+  gap: var(--s-md);
 }
 
-.checkbox-container input[type="checkbox"] {
-  appearance: none;
-  width: 20px;
-  height: 20px;
-  border-radius: 5px;
-  border: 2px solid #fff;
-  background: transparent;
-  position: relative;
+.nav-icon {
+  font-size: 18px;
   cursor: pointer;
-  transition: var(--transition);
+  transition: var(--fast);
 }
 
-.checkbox-container input[type="checkbox"]:checked {
-  background: var(--primary-color);
-  border-color: var(--primary-color);
+.nav-icon:hover {
+  color: var(--primary);
+  transform: scale(1.1);
 }
 
-.checkbox-container input[type="checkbox"]:checked::after {
-  content: '';
-  position: absolute;
-  top: 3px;
-  left: 6px;
-  width: 5px;
-  height: 10px;
-  border: solid #fff;
-  border-width: 0 2px 2px 0;
-  transform: rotate(45deg);
-}
-
-/* Responsive Login */
-@media (max-width: 900px) {
-  .login-container {
-    flex-direction: column;
-  }
-
-  .login-page::before {
-    width: 100%;
-    height: 200px;
-  }
+.hamburger {
+  display: none;
+  background: none;
+  font-size: 22px;
+  cursor: pointer;
 }
 
 /* ==========================================================
-   PRODUCT / CATEGORY PAGE
+   🔍 SEARCH
 ========================================================== */
+.search-bar {
+  position: relative;
+}
+
+.search-bar input {
+  padding: 10px 40px 10px 14px;
+  border-radius: var(--r-sm);
+  border: 1px solid #ddd;
+}
+
+.search-bar i {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--muted);
+}
+
+.search-results {
+  position: absolute;
+  top: 110%;
+  background: var(--card);
+  width: 100%;
+  border-radius: var(--r-sm);
+  box-shadow: var(--shadow-sm);
+  display: none;
+}
+
+.search-item {
+  padding: 10px;
+  cursor: pointer;
+}
+
+.search-item:hover {
+  background: #f2f2f2;
+}
+
+/* ==========================================================
+   🛍️ PRODUCT CARDS
+========================================================== */
+.product-container {
+  padding: var(--s-xl);
+}
+
 .product-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: var(--space-lg);
-  padding: var(--space-lg);
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: var(--s-lg);
 }
 
 .product-card {
-  background-color: var(--card-background);
-  border-radius: var(--radius-lg);
+  background: var(--card);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-sm);
   overflow: hidden;
-  box-shadow: 0 10px 20px var(--shadow-color);
-  transition: var(--transition);
-}
-
-.product-card img {
-  width: 100%;
-  display: block;
+  transition: var(--fast);
+  position: relative;
 }
 
 .product-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 15px 30px var(--shadow-color);
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-md);
 }
 
-.product-card .product-info {
-  padding: var(--space-md);
+.product-info {
+  padding: var(--s-md);
 }
 
-.product-card .product-info h3 {
-  font-size: 1.1rem;
-  margin-bottom: var(--space-sm);
+.product-info h3 {
+  margin-bottom: var(--s-xs);
 }
 
-.product-card .product-info p {
-  font-size: var(--font-size-small);
-  color: var(--muted-text);
+.product-info p {
+  color: var(--muted);
+  margin-bottom: var(--s-sm);
+}
+
+.add-to-cart,
+.order-now {
+  width: 100%;
+  padding: 10px;
+  border-radius: var(--r-sm);
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  color: #fff;
+  border: none;
+  transition: var(--fast);
+}
+
+.add-to-cart:hover {
+  opacity: 0.9;
+  transform: translateY(-2px);
+}
+
+.wishlist-icon {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  font-size: 18px;
+  color: var(--muted);
+  cursor: pointer;
+}
+
+.wishlist-icon.active {
+  color: var(--error);
 }
 
 /* ==========================================================
-   CART / WISHLIST PAGES
+   ❤️ CART & WISHLIST
 ========================================================== */
-.cart-item, .wishlist-item {
+.cart-card,
+.wishlist-card {
+  background: var(--card);
+  padding: var(--s-md);
+  border-radius: var(--r-md);
+  box-shadow: var(--shadow-sm);
+  margin-bottom: var(--s-md);
+}
+
+/* ==========================================================
+   🧾 HELP / FEEDBACK
+========================================================== */
+.feedback-section {
+  max-width: 650px;
+  margin: auto;
+  padding: var(--s-xl);
+  background: var(--card);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-md);
+}
+
+.feedback-section input,
+.feedback-section textarea {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: var(--s-md);
+  border-radius: var(--r-sm);
+  border: 1px solid #ddd;
+}
+
+/* ==========================================================
+   ⭐ PREMIUM LOGIN & REGISTER (SPECIAL PAGE)
+========================================================== */
+body:has(#login-form),
+body:has(#register-form) {
+  min-height: 100vh;
+  background: linear-gradient(120deg, #ff9a9e, #fad0c4);
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: var(--space-md);
-  background-color: var(--card-background);
-  border-radius: var(--radius-md);
-  margin-bottom: var(--space-md);
-  box-shadow: 0 5px 15px var(--shadow-color);
-  transition: var(--transition);
+  justify-content: center;
 }
 
-.cart-item:hover, .wishlist-item:hover {
+#login-form,
+#register-form {
+  background: var(--glass);
+  backdrop-filter: blur(18px);
+  padding: var(--s-xl);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-lg);
+  width: 100%;
+  max-width: 380px;
+  animation: slideFade 0.8s ease;
+}
+
+#login-form input,
+#register-form input {
+  background: rgba(255,255,255,0.85);
+  border: none;
+  padding: 14px;
+  margin-bottom: var(--s-md);
+  border-radius: var(--r-sm);
+}
+
+#login-form button,
+#register-form button {
+  padding: 14px;
+  border-radius: var(--r-sm);
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  color: #fff;
+  font-weight: 600;
+  transition: var(--fast);
+}
+
+#login-form button:hover {
   transform: translateY(-3px);
-  box-shadow: 0 10px 20px var(--shadow-color);
+  box-shadow: var(--shadow-md);
 }
 
 /* ==========================================================
-   CHECKOUT / ORDER PAGE
+   🎞️ ANIMATIONS
 ========================================================== */
-.checkout-page {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-lg);
-  padding: var(--space-lg);
-}
-
-.checkout-card {
-  background-color: var(--card-background);
-  padding: var(--space-md);
-  border-radius: var(--radius-md);
-  box-shadow: 0 10px 20px var(--shadow-color);
+@keyframes slideFade {
+  from { opacity: 0; transform: translateY(40px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 /* ==========================================================
-   HELP / SUPPORT PAGE
+   📱 RESPONSIVE
 ========================================================== */
-.help-section {
-  max-width: 800px;
-  margin: auto;
-  padding: var(--space-lg);
-  background-color: var(--card-background);
-  border-radius: var(--radius-lg);
-  box-shadow: 0 10px 20px var(--shadow-color);
+@media (max-width: 768px) {
+  .nav-links {
+    display: none;
+    flex-direction: column;
+    background: var(--card);
+    position: absolute;
+    top: 60px;
+    right: 20px;
+    padding: var(--s-md);
+    border-radius: var(--r-md);
+    box-shadow: var(--shadow-md);
+  }
+
+  .nav-links.active {
+    display: flex;
+  }
+
+  .hamburger {
+    display: block;
+  }
 }
 
-.help-section h2 {
-  margin-bottom: var(--space-md);
-}
 
-.help-section p {
-  margin-bottom: var(--space-sm);
-}
+  .nav-links.active {
+    display: flex;
+  }
 
-/* ==========================================================
-   MISC ANIMATIONS
-========================================================== */
-.fade-in {
-  animation: fadeIn 1s ease forwards;
-  opacity: 0;
+  .hamburger {
+    display: block;
+  }
 }
-
-@keyframes fadeIn {
-  0% {opacity: 0; transform: translateY(10px);}
-  100% {opacity: 1; transform: translateY(0);}
-}
-

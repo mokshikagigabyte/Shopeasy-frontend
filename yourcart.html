@@ -8,6 +8,8 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
+
+  <!-- Navbar -->
   <nav class="navbar">
     <div class="logo">
       <h2>ShopEasy</h2>
@@ -20,16 +22,32 @@
       <li><a href="category.html">Category</a></li>
       <li><a href="help.html">Help</a></li>
     </ul>
+    <div class="nav-right">
+      <a href="wishlist.html" class="nav-icon"><i class="fas fa-heart"></i></a>
+    </div>
   </nav>
+
+  <!-- Page Title -->
   <h1>Your Cart</h1>
+
+  <!-- Cart Items -->
   <div id="cartGrid"></div>
+
+  <!-- Payment Section -->
   <div id="payment-status" style="display: none; text-align: center; padding: 10px; margin: 10px;">
     <p id="payment-msg">Please complete payment to place your order.</p>
     <button id="pay-qr">Pay with QR</button>
     <button id="pay-cod">Pay with COD</button>
   </div>
-  <div id="success-msg" style="display: none;">Order placed successfully!</div>
-  <div id="failure-msg" style="display: none;">Please complete payment before placing the order.</div>
+
+  <!-- Success / Failure Messages -->
+  <div id="success-msg" style="display: none; text-align: center; color: green; font-weight: bold; margin-top: 15px;">
+    Order placed successfully!
+  </div>
+  <div id="failure-msg" style="display: none; text-align: center; color: red; font-weight: bold; margin-top: 15px;">
+    Please complete payment before placing the order.
+  </div>
+
   <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js"></script>
   <script src="script.js"></script>
 </body>

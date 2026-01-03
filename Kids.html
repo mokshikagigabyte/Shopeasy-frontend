@@ -1,14 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta http-equiv="CONTENT-TYPE" content="text/html; charset=UTF-8">
+  <meta charset="UTF-8">
   <title>Kids - ShopEasy</title>
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
+
   <!-- Navbar -->
- <nav class="navbar">
+  <nav class="navbar">
     <div class="logo">
       <h2>ShopEasy</h2>
     </div>
@@ -36,84 +37,123 @@
     <h1 class="section-title" style="border:1px solid black; border-radius: 12px;">Jeans Section</h1>
     <div class="section-content">
       <div class="product-grid">
-        <div class="product-card">
+
+        <!-- Blue Jeans -->
+        <div class="product-card"
+             data-id="kid-1"
+             data-name="Blue Jeans"
+             data-price="499"
+             data-image="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcThlEVwyfEKemKNLltssjNiTiSPFt6Xz_tmc51FS7p_iw&s">
           <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcThlEVwyfEKemKNLltssjNiTiSPFt6Xz_tmc51FS7p_iw&s" alt="Blue Jeans">
           <div class="product-info">
             <h3>Blue Jeans</h3>
             <p>₹499</p>
             <button class="add-to-cart">Add to Cart</button>
-           <a href="order.html" class="order-now">Order-Now</a>
-            <i class="fas fa-heart wishlist-icon" data-id="kid-1" data-name="Blue Jeans" data-price="499" data-image="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcThlEVwyfEKemKNLltssjNiTiSPFt6Xz_tmc51FS7p_iw&s"></i>
+            <a href="order.html" class="order-now">Order-Now</a>
+            <i class="fas fa-heart wishlist-icon"></i>
           </div>
         </div>
-        <div class="product-card">
+
+        <!-- Black Jeans -->
+        <div class="product-card"
+             data-id="kid-2"
+             data-name="Black Jeans"
+             data-price="549"
+             data-image="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQsBpdx4_UmfwPLzDYJS56MC95dWz4qNS2gDe4SOkMPTA&s">
           <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQsBpdx4_UmfwPLzDYJS56MC95dWz4qNS2gDe4SOkMPTA&s" alt="Black Jeans">
           <div class="product-info">
             <h3>Black Jeans</h3>
             <p>₹549</p>
             <button class="add-to-cart">Add to Cart</button>
-             <a href="order.html" class="order-now">Order-Now</a>
-            <i class="fas fa-heart wishlist-icon" data-id="kid-2" data-name="Black Jeans" data-price="549" data-image="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQsBpdx4_UmfwPLzDYJS56MC95dWz4qNS2gDe4SOkMPTA&s"></i>
+            <a href="order.html" class="order-now">Order-Now</a>
+            <i class="fas fa-heart wishlist-icon"></i>
           </div>
         </div>
+
       </div>
     </div>
   </div>
 
-  <!-- Shirt Section -->
+  <!-- Dress Section -->
   <div class="product-container" data-section-id="Dress">
     <h1 class="section-title" style="border:1px solid black; border-radius: 12px;">Dress Section</h1>
     <div class="section-content">
       <div class="product-grid">
-        <div class="product-card">
-          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcShQZoKk_OuE5TmJrkqfZuf2wYnK6pMxz2wIfVX1CE7iQ&s" alt="White Shirt">
+
+        <!-- Girls Dress -->
+        <div class="product-card"
+             data-id="kid-3"
+             data-name="Girls Dress"
+             data-price="399"
+             data-image="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcShQZoKk_OuE5TmJrkqfZuf2wYnK6pMxz2wIfVX1CE7iQ&s">
+          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcShQZoKk_OuE5TmJrkqfZuf2wYnK6pMxz2wIfVX1CE7iQ&s" alt="Girls Dress">
           <div class="product-info">
-            <h3>Girls dress</h3>
+            <h3>Girls Dress</h3>
             <p>₹399</p>
             <button class="add-to-cart">Add to Cart</button>
             <a href="order.html" class="order-now">Order-Now</a>
-            <i class="fas fa-heart wishlist-icon" data-id="kid-3" data-name="White Shirt" data-price="399" data-image="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcShQZoKk_OuE5TmJrkqfZuf2wYnK6pMxz2wIfVX1CE7iQ&s"></i>
+            <i class="fas fa-heart wishlist-icon"></i>
           </div>
         </div>
-        <div class="product-card">
-          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSHLrbWutq1fRUJm18Fu_zJ6lCO19NHUowLXJ7VgKqwiQ&s" alt="Blue Shirt">
+
+        <!-- Boys Dress -->
+        <div class="product-card"
+             data-id="kid-4"
+             data-name="Boys Dress"
+             data-price="449"
+             data-image="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSHLrbWutq1fRUJm18Fu_zJ6lCO19NHUowLXJ7VgKqwiQ&s">
+          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSHLrbWutq1fRUJm18Fu_zJ6lCO19NHUowLXJ7VgKqwiQ&s" alt="Boys Dress">
           <div class="product-info">
-            <h3>Boys dress</h3>
+            <h3>Boys Dress</h3>
             <p>₹449</p>
             <button class="add-to-cart">Add to Cart</button>
-          <a href="order.html" class="order-now">Order-Now</a>
-            <i class="fas fa-heart wishlist-icon" data-id="kid-4" data-name="Blue Shirt" data-price="449" data-image="https://images.unsplash.com/photo-1567401890850-5c9f0b949049?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60"></i>
+            <a href="order.html" class="order-now">Order-Now</a>
+            <i class="fas fa-heart wishlist-icon"></i>
           </div>
         </div>
+
       </div>
     </div>
   </div>
 
-  <!-- T-shirt Section -->
+  <!-- Toy Section -->
   <div class="product-container" data-section-id="toy">
     <h1 class="section-title" style="border:1px solid black; border-radius: 12px;">Toy Section</h1>
     <div class="section-content">
       <div class="product-grid">
-        <div class="product-card">
-          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQRcCq6eGWu0Be1cRa5bLDEjPVQmOBtNNxic7266AAFxA&s" alt="Red T-Shirt">
+
+        <!-- Car -->
+        <div class="product-card"
+             data-id="kid-5"
+             data-name="Toy Car"
+             data-price="299"
+             data-image="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQRcCq6eGWu0Be1cRa5bLDEjPVQmOBtNNxic7266AAFxA&s">
+          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQRcCq6eGWu0Be1cRa5bLDEjPVQmOBtNNxic7266AAFxA&s" alt="Toy Car">
           <div class="product-info">
-            <h3>Car</h3>
+            <h3>Toy Car</h3>
             <p>₹299</p>
             <button class="add-to-cart">Add to Cart</button>
             <a href="order.html" class="order-now">Order-Now</a>
-            <i class="fas fa-heart wishlist-icon" data-id="kid-5" data-name="Car" data-price="299" data-image="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQRcCq6eGWu0Be1cRa5bLDEjPVQmOBtNNxic7266AAFxA&s"></i>
+            <i class="fas fa-heart wishlist-icon"></i>
           </div>
         </div>
-        <div class="product-card">
-          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR-A9jfxKUhPO9APqcNq7kuZ3Qc8KTqFXUyLExrNZZcUoVB47rPgpe2-fwU&s=10" alt="Black T-Shirt">
+
+        <!-- Teddy Bear -->
+        <div class="product-card"
+             data-id="kid-6"
+             data-name="Teddy Bear"
+             data-price="349"
+             data-image="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR-A9jfxKUhPO9APqcNq7kuZ3Qc8KTqFXUyLExrNZZcUoVB47rPgpe2-fwU&s=10">
+          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR-A9jfxKUhPO9APqcNq7kuZ3Qc8KTqFXUyLExrNZZcUoVB47rPgpe2-fwU&s=10" alt="Teddy Bear">
           <div class="product-info">
-            <h3>Teddy bear</h3>
+            <h3>Teddy Bear</h3>
             <p>₹349</p>
             <button class="add-to-cart">Add to Cart</button>
-           <a href="order.html" class="order-now">Order-Now</a>
-            <i class="fas fa-heart wishlist-icon" data-id="kid-6" data-name="Black T-Shirt" data-price="349" data-image="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR-A9jfxKUhPO9APqcNq7kuZ3Qc8KTqFXUyLExrNZZcUoVB47rPgpe2-fwU&s=10"></i>
+            <a href="order.html" class="order-now">Order-Now</a>
+            <i class="fas fa-heart wishlist-icon"></i>
           </div>
         </div>
+
       </div>
     </div>
   </div>
@@ -123,30 +163,43 @@
     <h1 class="section-title" style="border:1px solid black; border-radius: 12px;">Shoes Section</h1>
     <div class="section-content">
       <div class="product-grid">
-        <div class="product-card">
-          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXU_jA7tLfLNzzylJHWrWUnM4NKXSRDBjVTb9f1Rrj_Q&s" alt="Sneakers">
+
+        <!-- Kids Sneakers -->
+        <div class="product-card"
+             data-id="kid-7"
+             data-name="Kids Sneakers"
+             data-price="699"
+             data-image="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXU_jA7tLfLNzzylJHWrWUnM4NKXSRDBjVTb9f1Rrj_Q&s">
+          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXU_jA7tLfLNzzylJHWrWUnM4NKXSRDBjVTb9f1Rrj_Q&s" alt="Kids Sneakers">
           <div class="product-info">
             <h3>Kids Sneakers</h3>
             <p>₹699</p>
             <button class="add-to-cart">Add to Cart</button>
             <a href="order.html" class="order-now">Order-Now</a>
-            <i class="fas fa-heart wishlist-icon" data-id="kid-7" data-name="Kids Sneakers" data-price="699" data-image="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXU_jA7tLfLNzzylJHWrWUnM4NKXSRDBjVTb9f1Rrj_Q&s"></i>
+            <i class="fas fa-heart wishlist-icon"></i>
           </div>
         </div>
-        <div class="product-card">
-          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSZ14sWQUkAoEGjJ1jcXnC1gaZ4vLCUxTcHuxmJZ_MBtA&s" alt="Casual Shoes">
+
+        <!-- Kids Sandals -->
+        <div class="product-card"
+             data-id="kid-8"
+             data-name="Kids Sandals"
+             data-price="649"
+             data-image="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSZ14sWQUkAoEGjJ1jcXnC1gaZ4vLCUxTcHuxmJZ_MBtA&s">
+          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSZ14sWQUkAoEGjJ1jcXnC1gaZ4vLCUxTcHuxmJZ_MBtA&s" alt="Kids Sandals">
           <div class="product-info">
             <h3>Kids Sandals</h3>
             <p>₹649</p>
             <button class="add-to-cart">Add to Cart</button>
             <a href="order.html" class="order-now">Order-Now</a>
-            <i class="fas fa-heart wishlist-icon" data-id="kid-8" data-name="Kids Casual Shoes" data-price="649" data-image="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSZ14sWQUkAoEGjJ1jcXnC1gaZ4vLCUxTcHuxmJZ_MBtA&s"></i>
+            <i class="fas fa-heart wishlist-icon"></i>
           </div>
         </div>
+
       </div>
     </div>
   </div>
-  
+
   <script src="script.js"></script>
 </body>
-  </html>
+</html>
