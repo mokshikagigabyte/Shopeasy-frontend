@@ -8,6 +8,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
+  <!-- Navbar -->
   <nav class="navbar">
     <div class="logo"><h2>ShopEasy</h2></div>
     <button class="hamburger" aria-label="Toggle Menu"><i class="fas fa-bars"></i></button>
@@ -26,7 +27,11 @@
       </div>
     </div>
   </nav>
+
+  <!-- Page Title -->
   <h1>Payment Statement (Owner Only)</h1>
+
+  <!-- Payment Statement Table -->
   <div id="statement-section" style="display: none;">
     <table id="payment-statement">
       <thead>
@@ -42,6 +47,8 @@
       <tbody id="statement-body"></tbody>
     </table>
   </div>
+
+  <!-- Owner Login -->
   <div id="auth-section">
     <form id="owner-login-form">
       <h2>Owner Login</h2>
@@ -50,7 +57,11 @@
       <button type="submit">Login</button>
     </form>
   </div>
+
+  <!-- Error Message -->
   <div id="error-msg" style="display: none;">Invalid owner credentials.</div>
+
+  <!-- Scripts -->
   <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js"></script>
   <script src="script.js"></script>
 </body>

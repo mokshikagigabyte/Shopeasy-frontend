@@ -17,18 +17,27 @@
       <li><a href="help.html">Help</a></li>
         </ul>
   </nav>
-  <h1>QR Payment</h1>
-  <div id="qr-section">
-    <p>Scan the QR code to confirm payment:</p>
-    <img id="scan-qr" src="https://i.supaimg.com/7ec51b0e-2434-4400-86d7-e82de9db0f0a.png" alt="Payment QR Code">
-    <input type="file" id="qr-upload" accept="image/*" style="display: none;">
-    <button id="scan-qr">Scan QR Code</button>
-    <a href="statement.html" id="statement" style="display: none;">View Statement</a>
+
+  <h1>Choose Payment Method</h1>
+  <div id = "payment-options">
+    <label>
+      <input type = "radio" name ="payment-method" value="qr">
+      QR Payment
+    </label>
   </div>
-  <button id="confirm-payment">Confirm Payment</button>
-  <div id="success-msg" style="display: none;">Payment successful!</div>
-  <div id="failure-msg" style="display: none;">Payment not confirmed. Please scan the QR code.</div>
-  <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js"></script>
-  <script src="script.js"></script>
-</body>
-</html>
+
+  <div id="qr-section" style="display: none;">
+    <p>Scan the QR code to pay:</p>
+    <img id="qr-image" src="https://i.supaimg.com/7ec51b0e-2434-4400-86d7-e82de9db0f0a.png" alt="Payment QR Code">
+     <input type="file" id="qr-upload" accept="image/*" style="display: none;">
+     <button id="scan-qr-btn">Scan QR Code</button>
+     <a href="statement.html" id="statement" style="display: none;">View Statement</a>
+   </div>
+
+  <button id="confirm-payment" type="button">Confirm Payment</button>
+  <div id="qr-success-msg" style="display: none;">Payment successful!</div>
+  <div id="qr-failure-msg" style="display: none;">Payment not confirmed. Please scan the QR code.</div>
+   <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js"></script>
+   <script src="script.js"></script>
+ </body>
+ </html>

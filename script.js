@@ -1,806 +1,449 @@
-// ~/storage/shared/shopeasy-frontend/script.js
-// Helper: Get simulated JWT token from localStorage
-const getToken = () => localStorage.getItem('token');
-
-// Helper: Get current user email from token
-const getUserEmail = () => {
-  const token = getToken();
-  return token ? token.replace('simulated-token-', '') : null;
+/* ==========================================================
+   GLOBAL STATE MANAGEMENT
+   Centralized state for user, cart, wishlist, orders
+========================================================== */
+const state = {
+  user: null,          // {id, username, email}
+  users: [],           // array of registered users
+  products: [],        // loaded from mock data
+  cart: [],            // array of {productId, quantity}
+  wishlist: [],        // array of productId
+  orders: []           // array of order objects
 };
 
-// Helper: Check if element exists
-function getElement(id) {
-  const element = document.getElementById(id);
-  if (!element) console.error(`Element with ID ${id} not found`);
-  return element;
-}
+// Load state from localStorage
+const loadState = () => {
+  state.users = JSON.parse(localStorage.getItem('users')) || [];
+  state.user = JSON.parse(localStorage.getItem('currentUser')) || null;
+  state.cart = JSON.parse(localStorage.getItem('cart')) || [];
+  state.wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
+  state.orders = JSON.parse(localStorage.getItem('orders')) || [];
+};
 
-// Utility: Generate unique ID
-const generateUniqueId = () => `txn-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+// Save state to localStorage
+const saveState = () => {
+  localStorage.setItem('users', JSON.stringify(state.users));
+  localStorage.setItem('currentUser', JSON.stringify(state.user));
+  localStorage.setItem('cart', JSON.stringify(state.cart));
+  localStorage.setItem('wishlist', JSON.stringify(state.wishlist));
+  localStorage.setItem('orders', JSON.stringify(state.orders));
+};
 
-document.addEventListener('DOMContentLoaded', () => {
-  // Initialize wishlist, cart, products, and payment statement
-  let wishlist = JSON.parse(localStorage.getItem('wishlist') || '[]');
-  let cart = JSON.parse(localStorage.getItem('cart') || '[]');
-  let allProducts = JSON.parse(localStorage.getItem('allProducts') || '[]');
-  let paymentStatement = JSON.parse(localStorage.getItem('paymentStatement') || '[]');
-  const currentPage = window.location.pathname.split('/').pop() || 'index.html';
-  let paymentConfirmed = JSON.parse(localStorage.getItem('paymentConfirmed') || 'false');
+/* ==========================================================
+   MOCK PRODUCTS DATA (Simulating API Response)
+========================================================== */
+const loadProducts = () => {
+  state.products = [
+    {
+      id: 1, name: 'Men T-Shirt', category: 'Men',
+      price: 499, image: 'images/men1.jpg', description: 'Comfortable cotton t-shirt'
+    },
+    {
+      id: 2, name: 'Women Dress', category: 'Women',
+      price: 1299, image: 'images/women1.jpg', description: 'Elegant summer dress'
+    },
+    {
+      id: 3, name: 'Kids Sneakers', category: 'Kids',
+      price: 799, image: 'images/kids1.jpg', description: 'Durable and stylish sneakers'
+    }
+    // TODO: Add more products or fetch from backend
+  ];
+};
 
-  // Debug initialization
-  console.log('Initial cart:', cart);
-  console.log('Initial paymentConfirmed:', paymentConfirmed);
-  console.log('Initial paymentStatement:', paymentStatement);
-  console.log('Current page:', currentPage);
+/* ==========================================================
+   AUTH FUNCTIONS
+========================================================== */
+const Auth = (() => {
 
-  // Authentication check for protected pages
-  const protectedPages = ['index.html', 'men.html', 'category.html', 'yourcart.html', 'wishlist.html', 'qr.html', 'cod.html'];
-  if (protectedPages.includes(currentPage) && !getToken()) {
-    console.log('No token found, redirecting to login.html');
-    window.location.href = 'login.html';
-    return;
-  }
+  // REGISTER
+  const register = ({username, email, password}) => {
+    if(state.users.find(u => u.email === email)){
+      return {success:false, message:'Email already registered'};
+    }
+    const id = Date.now();
+    const newUser = {id, username, email, password};
+    state.users.push(newUser);
+    saveState();
+    return {success:true, user:newUser};
+  };
 
-  // Owner authentication for statement.html
-  if (currentPage === 'statement.html') {
-    const ownerEmail = 'mokshika470@gmail.com';
-    const ownerPassword = 'admin123';
-    const authSection = getElement('auth-section');
-    const statementSection = getElement('statement-section');
-    const ownerLoginForm = getElement('owner-login-form');
-    const errorMsg = getElement('error-msg');
+  // LOGIN
+  const login = ({email, password}) => {
+    const user = state.users.find(u => u.email === email && u.password === password);
+    if(user){
+      state.user = user;
+      saveState();
+      return {success:true, user};
+    }
+    return {success:false, message:'Invalid credentials'};
+  };
 
-    if (getUserEmail() === ownerEmail && localStorage.getItem('ownerAuthenticated') === 'true') {
-      authSection.style.display = 'none';
-      statementSection.style.display = 'block';
-      renderStatement();
+  // LOGOUT
+  const logout = () => {
+    state.user = null;
+    saveState();
+  };
+
+  // SESSION CHECK
+  const isLoggedIn = () => !!state.user;
+
+  return {register, login, logout, isLoggedIn};
+})();
+
+/* ==========================================================
+   PRODUCT FUNCTIONS
+========================================================== */
+const Product = (() => {
+
+  // FILTER PRODUCTS BY CATEGORY
+  const filterByCategory = (category) => {
+    if(category === 'all') return state.products;
+    return state.products.filter(p => p.category === category);
+  };
+
+  // RENDER PRODUCTS TO PAGE
+  const renderProducts = (containerSelector, category='all') => {
+    const container = document.querySelector(containerSelector);
+    if(!container) return;
+    const products = filterByCategory(category);
+    container.innerHTML = '';
+    products.forEach(p => {
+      const card = document.createElement('div');
+      card.className = 'product-card';
+      card.innerHTML = `
+        <img src="${p.image}" alt="${p.name}">
+        <div class="product-info">
+          <h3>${p.name}</h3>
+          <p>${p.description}</p>
+          <p>₹${p.price}</p>
+          <button class="add-to-cart" data-id="${p.id}">Add to Cart</button>
+          <button class="wishlist-btn" data-id="${p.id}">
+            ${state.wishlist.includes(p.id)? 'Remove Wishlist' : 'Add Wishlist'}
+          </button>
+        </div>
+      `;
+      container.appendChild(card);
+    });
+  };
+
+  return {renderProducts, filterByCategory};
+})();
+
+/* ==========================================================
+   CART FUNCTIONS
+========================================================== */
+const Cart = (() => {
+
+  const addToCart = (productId) => {
+    const item = state.cart.find(i => i.productId === productId);
+    if(item){
+      item.quantity++;
     } else {
-      authSection.style.display = 'block';
-      statementSection.style.display = 'none';
-      if (getUserEmail() && getUserEmail() !== ownerEmail) {
-        console.log('Unauthorized access to statement.html by:', getUserEmail());
-        errorMsg.style.display = 'block';
-        setTimeout(() => { window.location.href = 'login.html'; }, 2000);
-      }
+      state.cart.push({productId, quantity:1});
     }
+    saveState();
+    renderCart();
+  };
 
-    if (ownerLoginForm) {
-      ownerLoginForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const emailInput = getElement('owner-email');
-        const passwordInput = getElement('owner-password');
-        const email = emailInput?.value;
-        const password = passwordInput?.value;
-        if (email === ownerEmail && password === ownerPassword) {
-          localStorage.setItem('ownerAuthenticated', 'true');
-          localStorage.setItem('token', `simulated-token-${email}`);
-          authSection.style.display = 'none';
-          statementSection.style.display = 'block';
-          console.log('Owner login successful');
-          renderStatement();
-        } else {
-          errorMsg.style.display = 'block';
-          setTimeout(() => { errorMsg.style.display = 'none'; }, 3000);
-          console.error('Owner login failed');
-        }
-      });
+  const removeFromCart = (productId) => {
+    state.cart = state.cart.filter(i => i.productId !== productId);
+    saveState();
+    renderCart();
+  };
+
+  const updateQuantity = (productId, qty) => {
+    const item = state.cart.find(i => i.productId === productId);
+    if(item){
+      item.quantity = qty;
+      if(item.quantity <= 0) removeFromCart(productId);
+      saveState();
+      renderCart();
     }
-  }
+  };
 
-  // Hamburger menu toggle
-  const hamburger = document.querySelector('.hamburger');
-  const navLinks = document.querySelector('.nav-links');
-  if (hamburger && navLinks) {
-    hamburger.addEventListener('click', () => {
-      navLinks.classList.toggle('active');
-      const icon = hamburger.querySelector('i');
-      icon.classList.toggle('fa-bars');
-      icon.classList.toggle('fa-times');
-      console.log('Menu toggled:', navLinks.classList.contains('active'));
+  const calculateTotal = () => {
+    return state.cart.reduce((acc,i)=>{
+      const prod = state.products.find(p=>p.id===i.productId);
+      return acc + (prod.price * i.quantity);
+    },0);
+  };
+
+  const renderCart = () => {
+    const container = document.querySelector('#cart-items');
+    if(!container) return;
+    container.innerHTML = '';
+    state.cart.forEach(item => {
+      const product = state.products.find(p=>p.id===item.productId);
+      const row = document.createElement('div');
+      row.className = 'cart-item';
+      row.innerHTML = `
+        <span>${product.name}</span>
+        <span>₹${product.price}</span>
+        <input type="number" value="${item.quantity}" min="1" data-id="${product.id}" class="qty-input">
+        <button class="remove-cart" data-id="${product.id}">Remove</button>
+      `;
+      container.appendChild(row);
     });
-  }
+    const totalEl = document.querySelector('#cart-total');
+    if(totalEl) totalEl.textContent = `Total: ₹${calculateTotal()}`;
+  };
 
-  // Authentication
-  const authSection = getElement('auth-section');
-  const loginForm = getElement('loginForm');
-  const registerForm = getElement('registerForm');
-  const loginFormElement = getElement('login-form');
-  const registerFormElement = getElement('register-form');
+  return {addToCart, removeFromCart, updateQuantity, renderCart, calculateTotal};
+})();
 
-  // Debug auth elements
-  console.log('Auth elements:', {
-    authSection: !!authSection,
-    loginForm: !!loginForm,
-    registerForm: !!registerForm,
-    loginFormElement: !!loginFormElement,
-    registerFormElement: !!registerFormElement
-  });
+/* ==========================================================
+   WISHLIST FUNCTIONS
+========================================================== */
+const Wishlist = (() => {
 
-  // Toggle between login and register forms
-  function toggleForm() {
-    if (loginForm && registerForm) {
-      loginForm.classList.toggle('hidden');
-      registerForm.classList.toggle('hidden');
-      console.log('Toggled forms:', loginForm.classList.contains('hidden') ? 'Register' : 'Login');
+  const toggleWishlist = (productId) => {
+    if(state.wishlist.includes(productId)){
+      state.wishlist = state.wishlist.filter(id=>id!==productId);
     } else {
-      console.error('Cannot toggle forms: loginForm or registerForm missing');
+      state.wishlist.push(productId);
     }
-  }
-  document.querySelectorAll('.toggle-link').forEach(link => {
-    link.addEventListener('click', (e) => {
-      e.preventDefault();
-      toggleForm();
+    saveState();
+    renderWishlist();
+  };
+
+  const renderWishlist = () => {
+    const container = document.querySelector('#wishlist-items');
+    if(!container) return;
+    container.innerHTML = '';
+    state.wishlist.forEach(id=>{
+      const product = state.products.find(p=>p.id===id);
+      const row = document.createElement('div');
+      row.className = 'wishlist-item';
+      row.innerHTML = `
+        <span>${product.name}</span>
+        <span>₹${product.price}</span>
+        <button class="remove-wishlist" data-id="${id}">Remove</button>
+      `;
+      container.appendChild(row);
     });
-  });
+  };
 
-  // Handle login form submission (frontend-only)
-  if (loginFormElement) {
-    loginFormElement.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const emailInput = getElement('login-email');
-      const passwordInput = getElement('login-password');
-      const email = emailInput?.value;
-      const password = passwordInput?.value;
-      if (!email || !password) {
-        alert('Please enter email and password');
-        return;
-      }
+  return {toggleWishlist, renderWishlist};
+})();
 
-      // Check credentials against localStorage
-      const users = JSON.parse(localStorage.getItem('users') || '[]');
-      const user = users.find(u => u.email === email && u.password === password);
-      if (user) {
-        localStorage.setItem('token', `simulated-token-${email}`);
-        if (authSection) authSection.style.display = 'none';
-        if (loginForm) loginForm.classList.add('hidden');
-        if (registerForm) registerForm.classList.add('hidden');
-        console.log('Login successful for:', email);
-        window.location.href = 'index.html';
-      } else {
-        alert('Invalid email or password');
-        console.error('Login failed: Invalid credentials');
-      }
-    });
-  }
+/* ==========================================================
+   ORDER & CHECKOUT FUNCTIONS
+========================================================== */
+const Order = (() => {
 
-  // Handle register form submission (frontend-only)
-  if (registerFormElement) {
-    registerFormElement.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const emailInput = getElement('login-email');
-      const passwordInput = getElement('login-password');
-      const email = emailInput?.value;
-      const password = passwordInput?.value;
-      if (!email || !password) {
-        alert('Please enter email and password');
-        return;
-      }
+  const createOrder = (paymentMethod='COD') => {
+    if(!state.user || state.cart.length === 0) return null;
+    const id = `ORD${Date.now()}`;
+    const items = state.cart.map(i=>({productId:i.productId, quantity:i.quantity}));
+    const total = Cart.calculateTotal();
+    const order = {id, userId: state.user.id, items, total, paymentMethod, timestamp: new Date().toISOString(), status:'Pending'};
+    state.orders.push(order);
+    state.cart = [];
+    saveState();
+    Cart.renderCart();
+    return order;
+  };
 
-      // Store new user in localStorage
-      const users = JSON.parse(localStorage.getItem('users') || '[]');
-      if (users.some(u => u.email === email)) {
-        alert('Email already registered');
-        console.error('Registration failed: Email exists');
-        return;
-      }
-      users.push({ email, password });
-      localStorage.setItem('users', JSON.stringify(users));
-      localStorage.setItem('token', `simulated-token-${email}`);
-      if (authSection) authSection.style.display = 'none';
-      if (loginForm) loginForm.classList.add('hidden');
-      if (registerForm) registerForm.classList.add('hidden');
-      console.log('Registration successful for:', email);
-      window.location.href = 'index.html';
-    });
-  }
-
-  // Load all products (static only)
-  function loadProducts(query = '') {
-    const productGrid = document.querySelector('.product-grid');
-    if (!productGrid && !query) return console.warn(`No product grid on ${currentPage}`);
-
-    // Load static products from HTML
-    const products = [];
-    const productCards = document.querySelectorAll('.product-card');
-    productCards.forEach(card => {
-      const wishlistIcon = card.querySelector('.wishlist-icon');
-      const id = wishlistIcon?.dataset.id || card.dataset.id || generateUniqueId();
-      const name = card.querySelector('h3')?.textContent.trim() || 'Unnamed Product';
-      const price = card.querySelector('p')?.textContent.replace(/[^0-9.]/g, '') || '0';
-      const image = card.querySelector('img')?.dataset.image || card.querySelector('img')?.src || 'https://via.placeholder.com/150';
-      if (id && name && price && !image.startsWith('content://')) {
-        products.push({ id, name, price, image, page: currentPage });
-        card.dataset.id = id;
-        if (wishlistIcon) {
-          wishlistIcon.dataset.id = id;
-          wishlistIcon.dataset.name = name;
-          wishlistIcon.dataset.price = price;
-          wishlistIcon.dataset.image = image;
-        }
-      } else {
-        console.warn('Invalid product data:', { id, name, price, image });
-      }
-    });
-    allProducts = [...new Map([...allProducts, ...products].map(p => [p.id, p])).values()];
-    localStorage.setItem('allProducts', JSON.stringify(allProducts));
-    console.log('Updated allProducts:', allProducts);
-
-    // Filter products if query exists
-    if (query) {
-      const targetGrid = document.querySelector('.product-grid') || document.createElement('div');
-      if (!targetGrid.classList.contains('product-grid')) {
-        targetGrid.classList.add('product-grid');
-        const searchResults = getElement('searchResults');
-        if (searchResults) searchResults.appendChild(targetGrid);
-      }
-      targetGrid.innerHTML = '';
-      const filteredProducts = allProducts.filter(product =>
-        (product.name?.toLowerCase() || '').includes(query.toLowerCase()) ||
-        (product.price?.toString().toLowerCase() || '').includes(query.toLowerCase())
-      );
-      filteredProducts.forEach(product => {
-        const card = document.createElement('div');
-        card.className = 'product-card';
-        card.dataset.id = product.id;
-        card.innerHTML = `
-          <img src="${product.image || 'https://via.placeholder.com/150'}" alt="${product.name}">
-          <div class="product-info">
-            <h3>${product.name}</h3>
-            <p>₹${product.price}</p>
-            <button class="add-to-cart">Add to Cart</button>
-            <a href="#" class="order-now">Order Now</a>
-            <i class="fas fa-heart wishlist-icon${wishlist.some(item => item.id === product.id) ? ' active' : ''}" 
-               data-id="${product.id}" 
-               data-name="${product.name}" 
-               data-price="${product.price}" 
-               data-image="${product.image || 'https://via.placeholder.com/150'}"></i>
-          </div>
-        `;
-        targetGrid.appendChild(card);
-      });
-      console.log('Filtered products:', filteredProducts.length);
-    }
-    updateWishlistIcons();
-  }
-
-  // Update wishlist icon states
-  function updateWishlistIcons() {
-    document.querySelectorAll('.wishlist-icon').forEach(icon => {
-      if (icon.dataset.id) {
-        icon.classList.toggle('active', wishlist.some(item => item.id === icon.dataset.id));
-      }
-    });
-  }
-
-  // Render payment statement
-  function renderStatement() {
-    const statementBody = getElement('statement-body');
-    if (!statementBody) return console.error('statement-body not found');
-
-    statementBody.innerHTML = '';
-    if (!paymentStatement.length) {
-      statementBody.innerHTML = '<tr><td colspan="6">No payment records found.</td></tr>';
-      return;
-    }
-
-    paymentStatement.forEach(record => {
+  const renderStatement = () => {
+    const container = document.querySelector('#statement-body');
+    if(!container) return;
+    container.innerHTML = '';
+    state.orders.forEach(o=>{
+      const user = state.users.find(u=>u.id===o.userId);
+      const itemsDesc = o.items.map(i=>{
+        const p = state.products.find(prod=>prod.id===i.productId);
+        return `${p.name} (x${i.quantity})`;
+      }).join(', ');
       const row = document.createElement('tr');
       row.innerHTML = `
-        <td>${record.transactionId}</td>
-        <td>${record.email}</td>
-        <td>${record.method}</td>
-        <td>${record.status}</td>
-        <td>${new Date(record.timestamp).toLocaleString()}</td>
-        <td>${record.items ? record.items.map(item => item.name).join(', ') : 'N/A'}</td>
+        <td>${o.id}</td>
+        <td>${user.email}</td>
+        <td>${o.paymentMethod}</td>
+        <td>${o.status}</td>
+        <td>${new Date(o.timestamp).toLocaleString()}</td>
+        <td>${itemsDesc}</td>
       `;
-      statementBody.appendChild(row);
+      container.appendChild(row);
     });
-    console.log('Rendered payment statement:', paymentStatement);
-  }
+  };
 
-  // Verify payment for current user
-  function verifyPayment(email) {
-    const latestPayment = paymentStatement
-      .filter(record => record.email === email)
-      .sort((a, b) => b.timestamp - a.timestamp)[0];
-    return latestPayment && latestPayment.status === 'success';
-  }
+  return {createOrder, renderStatement};
+})();
 
-  // Record payment attempt
-  function recordPayment(method, status, email, items = null) {
-    const transactionId = generateUniqueId();
-    const record = {
-      transactionId,
-      email,
-      method,
-      status,
-      timestamp: Date.now(),
-      items: status === 'success' ? items : null
-    };
-    paymentStatement.push(record);
-    localStorage.setItem('paymentStatement', JSON.stringify(paymentStatement));
-    console.log('Recorded payment:', record);
-    return record;
-  }
+/* ==========================================================
+   PAGE-AWARE INIT
+========================================================== */
+const initPage = () => {
+  loadState();
+  loadProducts();
 
-  // Folding sections (men.html, category.html)
-  if (['men.html', 'category.html'].includes(currentPage)) {
-    const sectionTitles = document.querySelectorAll('.section-title');
-    console.log('Found section titles:', sectionTitles.length);
-    sectionTitles.forEach(title => {
-      title.addEventListener('click', () => {
-        console.log('Section title clicked:', title.textContent);
-        const section = title.closest('.product-container');
-        if (!section) {
-          console.warn('No product-container found for section:', title.textContent);
-          return;
-        }
-        const productGrid = section.querySelector('.product-grid');
-        if (!productGrid) {
-          console.warn('No product-grid found in section:', title.textContent);
-          return;
-        }
-        section.classList.toggle('active');
-        productGrid.style.display = section.classList.contains('active') ? 'grid' : 'none';
-        console.log(`Toggled section: ${title.textContent}, Active: ${section.classList.contains('active')}`);
-      });
+  const page = document.body.dataset.page; // set <body data-page="home">
+  
+  try{
+    switch(page){
+      case 'index':
+      case 'category':
+      case 'Men':
+      case 'Women':
+      case 'Kids':
+        Product.renderProducts('#product-container', page==='index'?'all':page);
+        break;
+      case 'yourcart':
+        Cart.renderCart();
+        break;
+      case 'wishlist':
+        Wishlist.renderWishlist();
+        break;
+      case 'login':
+        initAuthForms();
+        break;
+      case 'statement':
+        Order.renderStatement();
+        break;
+      case 'order':
+      case 'cod':
+      case 'qr':
+        renderCheckoutPage();
+        break;
+      case 'help':
+        // optional help scripts
+        break;
+      default:
+        break;
+    }
+
+    initGlobalEvents();
+  } catch(err){
+    console.error('Page init error:', err);
+  }
+};
+
+/* ==========================================================
+   GLOBAL EVENT LISTENERS
+========================================================== */
+const initGlobalEvents = () => {
+  // PRODUCT BUTTONS
+  document.querySelectorAll('.add-to-cart').forEach(btn=>{
+    btn.addEventListener('click', e=>{
+      const id = parseInt(e.target.dataset.id);
+      Cart.addToCart(id);
     });
-  }
-
-  // Event delegation
-  document.addEventListener('click', async (e) => {
-    const target = e.target;
-    const productCard = target.closest('.product-card');
-    if (productCard) {
-      const id = productCard.dataset.id || generateUniqueId();
-      const name = productCard.querySelector('h3')?.textContent.trim() || 'Unnamed Product';
-      const price = productCard.querySelector('p')?.textContent.replace(/[^0-9.]/g, '') || '0';
-      const image = productCard.querySelector('img')?.src || 'https://via.placeholder.com/150';
-      const product = { id, name, price, image };
-
-      console.log('Product card clicked:', { id, name, price, image });
-
-      // Wishlist icon
-      if (target.classList.contains('wishlist-icon')) {
-        if (!id || !image || image.startsWith('content://')) {
-          console.warn('Invalid wishlist item:', product);
-          return;
-        }
-        const index = wishlist.findIndex(item => item.id === id);
-        if (index === -1) {
-          wishlist.push(product);
-          target.classList.add('active');
-          console.log('Added to wishlist:', id);
-        } else {
-          wishlist.splice(index, 1);
-          target.classList.remove('active');
-          console.log('Removed from wishlist:', id);
-        }
-        localStorage.setItem('wishlist', JSON.stringify(wishlist));
-        if (currentPage === 'wishlist.html') renderWishlist();
-        updateWishlistIcons();
-      }
-
-      // Add to Cart
-      if (target.classList.contains('add-to-cart')) {
-        if (!id || !name || !price || !image || image.startsWith('content://')) {
-          console.error('Invalid product for cart:', product);
-          alert('Cannot add to cart: Invalid product data');
-          return;
-        }
-        if (!cart.some(item => item.id === id)) {
-          cart.push(product);
-          localStorage.setItem('cart', JSON.stringify(cart));
-          alert(`${name} added to cart!`);
-          console.log('Added to cart:', product);
-          console.log('Updated cart:', cart);
-          if (currentPage === 'yourcart.html') renderCart();
-        } else {
-          alert(`${name} is already in your cart.`);
-        }
-      }
-
-      // Remove from Cart (only on yourcart.html)
-      if (target.classList.contains('remove-from-cart') && currentPage === 'yourcart.html') {
-        const index = cart.findIndex(item => item.id === id);
-        if (index !== -1) {
-          cart.splice(index, 1);
-          localStorage.setItem('cart', JSON.stringify(cart));
-          alert(`${name} removed`);
-          console.log('Removed from cart', id);
-          console.log('Updated cart:', cart);
-          renderCart();
-        }
-      }
-
-      // Order Now
-      if (target.classList.contains('order-now') && currentPage === 'yourcart.html') {
-        e.preventDefault();
-        if (!cart.length) {
-          alert('Your cart is empty. Add items to place an order.');
-          return;
-        }
-        const email = getUserEmail();
-        if (!verifyPayment(email)) {
-          const paymentStatus = getElement('payment-status');
-          const failureMsg = getElement('failure-msg');
-          if (paymentStatus) paymentStatus.style.display = 'block';
-          if (failureMsg) {
-            failureMsg.style.display = 'block';
-            setTimeout(() => { failureMsg.style.display = 'none'; }, 3000);
-          }
-          console.log('Order attempted without payment verification');
-          return;
-        }
-        // Confirm order
-        console.log(`Order placed for: ${cart.map(item => item.name).join(', ')}`);
-        const successMsg = getElement('success-msg');
-        if (successMsg) {
-          successMsg.style.display = 'block';
-          setTimeout(() => { successMsg.style.display = 'none'; }, 3000);
-        }
-        // Update statement with successful order
-        const latestPayment = paymentStatement
-          .filter(record => record.email === email)
-          .sort((a, b) => b.timestamp - a.timestamp)[0];
-        if (latestPayment && !latestPayment.items) {
-          latestPayment.items = [...cart];
-          localStorage.setItem('paymentStatement', JSON.stringify(paymentStatement));
-        }
-        // Clear cart and reset payment
-        cart = [];
-        paymentConfirmed = false;
-        localStorage.setItem('cart', JSON.stringify(cart));
-        localStorage.setItem('paymentConfirmed', JSON.stringify(paymentConfirmed));
-        renderCart();
-        console.log('Order confirmed, cart cleared');
-      }
-    }
-
-    // Pay with QR or COD
-    if (target.id === 'pay-qr' && currentPage === 'yourcart.html') {
-      window.location.href = 'qr.html';
-    }
-    if (target.id === 'pay-cod' && currentPage === 'yourcart.html') {
-      window.location.href = 'cod.html';
-    }
-
-    // Scan QR Code
-    if (target.id === 'scan-qr' && currentPage === 'qr.html') {
-      const qrUpload = getElement('qr-upload');
-      if (qrUpload) {
-        qrUpload.click();
-      }
-    }
-
-    // Close nav-links and check payment status
-    if (target.tagName === 'A' && navLinks?.classList.contains('active')) {
-      navLinks.classList.remove('active');
-      const icon = hamburger?.querySelector('i');
-      if (icon) {
-        icon.classList.add('fa-bars');
-        icon.classList.remove('fa-times');
-      }
-      // Record failed payment if navigating away without confirmation
-      if (['qr.html', 'cod.html'].includes(currentPage) && !paymentConfirmed) {
-        const failureMsg = getElement('failure-msg');
-        if (failureMsg) {
-          failureMsg.style.display = 'block';
-          setTimeout(() => { failureMsg.style.display = 'none'; }, 3000);
-        }
-        const email = getUserEmail();
-        if (email && currentPage === 'qr.html') {
-          recordPayment('QR', 'failed', email);
-        }
-      }
-    }
   });
 
-  // Prevent navigation if payment not confirmed
-  if (['qr.html', 'cod.html'].includes(currentPage)) {
-    window.addEventListener('beforeunload', (e) => {
-      if (!paymentConfirmed) {
-        const failureMsg = getElement('failure-msg');
-        if (failureMsg) {
-          failureMsg.style.display = 'block';
-          setTimeout(() => { failureMsg.style.display = 'none'; }, 3000);
-        }
-        const email = getUserEmail();
-        if (email && currentPage === 'qr.html') {
-          recordPayment('QR', 'failed', email);
-        }
-        e.preventDefault();
-        e.returnValue = 'You didn\'t scan or place the order. Are you sure you want to leave?';
-      }
+  document.querySelectorAll('.wishlist-btn').forEach(btn=>{
+    btn.addEventListener('click', e=>{
+      const id = parseInt(e.target.dataset.id);
+      Wishlist.toggleWishlist(id);
+      e.target.textContent = state.wishlist.includes(id)? 'Remove Wishlist':'Add Wishlist';
     });
-  }
+  });
 
-  // QR Code Scanning
-  if (currentPage === 'qr.html') {
-    const qrUpload = getElement('qr-upload');
-    const confirmPaymentBtn = getElement('confirm-payment');
-    const successMsg = getElement('success-msg');
-    const qrSection = getElement('qr-section');
+  // CART QUANTITY CHANGE
+  document.querySelectorAll('.qty-input').forEach(input=>{
+    input.addEventListener('change', e=>{
+      const id = parseInt(e.target.dataset.id);
+      const qty = parseInt(e.target.value);
+      Cart.updateQuantity(id, qty);
+    });
+  });
 
-    if (qrUpload && confirmPaymentBtn && successMsg && qrSection) {
-      qrUpload.addEventListener('change', (e) => {
-        const file = e.target.files[0];
-        if (!file) {
-          console.warn('No QR code image selected');
-          return;
-        }
+  // CART REMOVE BUTTONS
+  document.querySelectorAll('.remove-cart').forEach(btn=>{
+    btn.addEventListener('click', e=>{
+      const id = parseInt(e.target.dataset.id);
+      Cart.removeFromCart(id);
+    });
+  });
 
-        const reader = new FileReader();
-        reader.onload = (event) => {
-          const img = new Image();
-          img.src = event.target.result;
-          img.onload = () => {
-            const canvas = document.createElement('canvas');
-            canvas.width = img.width;
-            canvas.height = img.height;
-            const ctx = canvas.getContext('2d');
-            ctx.drawImage(img, 0, 0);
-            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-            
-            const email = getUserEmail();
-            try {
-              const code = jsQR(imageData.data, imageData.width, imageData.height);
-              if (code && code.data === 'PAYMENT_CONFIRMED') {
-                paymentConfirmed = true;
-                localStorage.setItem('paymentConfirmed', JSON.stringify(paymentConfirmed));
-                recordPayment('QR', 'success', email, cart);
-                qrSection.style.display = 'none';
-                confirmPaymentBtn.style.display = 'none';
-                successMsg.style.display = 'block';
-                console.log('QR payment confirmed automatically');
-              } else {
-                console.warn('Invalid or unrecognized QR code:', code?.data);
-                recordPayment('QR', 'failed', email);
-                const failureMsg = getElement('failure-msg');
-                if (failureMsg) {
-                  failureMsg.style.display = 'block';
-                  setTimeout(() => { failureMsg.style.display = 'none'; }, 3000);
-                }
-                alert('Invalid QR code. Please try again.');
-              }
-            } catch (error) {
-              console.error('Error scanning QR code:', error);
-              recordPayment('QR', 'failed', email);
-              const failureMsg = getElement('failure-msg');
-              if (failureMsg) {
-                failureMsg.style.display = 'block';
-                setTimeout(() => { failureMsg.style.display = 'none'; }, 3000);
-              }
-              alert('Error scanning QR code. Please try again.');
-            }
-          };
-        };
-        reader.readAsDataURL(file);
-      });
+  // WISHLIST REMOVE BUTTONS
+  document.querySelectorAll('.remove-wishlist').forEach(btn=>{
+    btn.addEventListener('click', e=>{
+      const id = parseInt(e.target.dataset.id);
+      Wishlist.toggleWishlist(id);
+    });
+  });
 
-      // Manual confirm payment (fallback)
-      confirmPaymentBtn.addEventListener('click', () => {
-        const email = getUserEmail();
-        paymentConfirmed = true;
-        localStorage.setItem('paymentConfirmed', JSON.stringify(paymentConfirmed));
-        recordPayment('QR', 'success', email, cart);
-        qrSection.style.display = 'none';
-        confirmPaymentBtn.style.display = 'none';
-        successMsg.style.display = 'block';
-        console.log('QR payment confirmed manually');
-      });
-    }
-  }
+  // LOGOUT BUTTON (if exists)
+  const logoutBtn = document.querySelector('#logout-btn');
+  if(logoutBtn) logoutBtn.addEventListener('click', ()=>{ Auth.logout(); location.reload(); });
+};
 
-  // Search Functionality
-  const searchInput = getElement('searchInput');
-  const searchResults = getElement('searchResults');
-  if (searchInput && searchResults) {
-    function filterAndInsertProducts() {
-      const query = searchInput.value.toLowerCase().trim();
-      searchResults.innerHTML = '';
-      searchResults.classList.remove('active');
+/* ==========================================================
+   AUTH FORM INIT
+========================================================== */
+const initAuthForms = () => {
+  const loginForm = document.querySelector('#login-form');
+  const registerForm = document.querySelector('#register-form');
 
-      if (!query) {
-        document.querySelectorAll('.product-card.filtered').forEach(card => card.remove());
-        return;
-      }
-
-      const filteredProducts = allProducts.filter(product =>
-        (product.name?.toLowerCase() || '').includes(query) ||
-        (product.price?.toString().toLowerCase() || '').includes(query)
-      );
-
-      if (filteredProducts.length) {
-        searchResults.innerHTML = `<p>${filteredProducts.length} result(s) found.</p>`;
-        const targetGrid = document.createElement('div');
-        targetGrid.classList.add('product-grid');
-        searchResults.appendChild(targetGrid);
-
-        filteredProducts.forEach(product => {
-          const productCard = document.createElement('div');
-          productCard.classList.add('product-card', 'filtered');
-          productCard.dataset.id = product.id;
-          productCard.innerHTML = `
-            <img src="${product.image}" alt="${product.name}">
-            <div class="product-info">
-              <h3>${product.name}</h3>
-              <p>₹${product.price}</p>
-              <button class="add-to-cart">Add to Cart</button>
-              <a href="#" class="order-now">Order Now</a>
-              <i class="fas fa-heart wishlist-icon${wishlist.some(item => item.id === product.id) ? ' active' : ''}" 
-                 data-id="${product.id}" 
-                 data-name="${product.name}" 
-                 data-price="${product.price}" 
-                 data-image="${product.image}"></i>
-            </div>
-          `;
-          targetGrid.appendChild(productCard);
-        });
-        searchResults.classList.add('active');
-        updateWishlistIcons();
+  // LOGIN
+  if(loginForm){
+    loginForm.addEventListener('submit', e=>{
+      e.preventDefault();
+      const email = document.querySelector('#login-email').value.trim();
+      const password = document.querySelector('#login-password').value.trim();
+      const res = Auth.login({email, password});
+      if(res.success){
+        alert('Login successful!');
+        location.href = 'index.html';
       } else {
-        searchResults.innerHTML = '<p>No results found.</p>';
-        searchResults.classList.add('active');
-      }
-    }
-
-    let searchTimeout;
-    function debouncedSearch() {
-      clearTimeout(searchTimeout);
-      searchTimeout = setTimeout(filterAndInsertProducts, 300);
-    }
-
-    searchInput.addEventListener('input', debouncedSearch);
-    searchInput.addEventListener('keypress', (e) => {
-      if (e.key === 'Enter') filterAndInsertProducts();
-    });
-
-    document.addEventListener('click', (e) => {
-      if (!searchResults.contains(e.target) && !searchInput.contains(e.target) && !e.target.classList.contains('fa-search')) {
-        searchResults.innerHTML = '';
-        searchResults.classList.remove('active');
+        alert(res.message);
       }
     });
   }
 
-  // Render Wishlist
-  function renderWishlist() {
-    const wishlistGrid = getElement('wishlistGrid');
-    if (!wishlistGrid) return;
-
-    wishlistGrid.innerHTML = '';
-    if (!wishlist.length) {
-      wishlistGrid.innerHTML = '<p>Your wishlist is empty.</p>';
-      return;
-    }
-
-    wishlist.forEach(item => {
-      const productCard = document.createElement('div');
-      productCard.classList.add('product-card');
-      productCard.dataset.id = item.id;
-      productCard.innerHTML = `
-        <img src="${item.image}" alt="${item.name}">
-        <div class="product-info">
-          <h3>${item.name}</h3>
-          <p>₹${item.price}</p>
-          <button class="add-to-cart">Add to Cart</button>
-          <a href="#" class="order-now">Order Now</a>
-          <i class="fas fa-heart wishlist-icon active" 
-             data-id="${item.id}" 
-             data-name="${item.name}" 
-             data-price="${item.price}" 
-             data-image="${item.image}"></i>
-        </div>
-      `;
-      wishlistGrid.appendChild(productCard);
-    });
-    updateWishlistIcons();
-  }
-
-  // Render Cart
-  function renderCart() {
-    const cartGrid = getElement('cartGrid');
-    if (!cartGrid) {
-      console.error('cartGrid not found on yourcart.html');
-      return;
-    }
-
-    console.log('Rendering cart with items:', cart);
-    cartGrid.innerHTML = '';
-    if (!cart.length) {
-      cartGrid.innerHTML = '<p>Your cart is empty.</p>';
-      console.log('Cart is empty');
-      const paymentStatus = getElement('payment-status');
-      if (paymentStatus) paymentStatus.style.display = 'none';
-      return;
-    }
-
-    cart.forEach(item => {
-      console.log('Rendering cart item:', item);
-      if (!item.id || !item.name || !item.price || !item.image) {
-        console.warn('Invalid cart item:', item);
-        return;
-      }
-      const productCard = document.createElement('div');
-      productCard.classList.add('product-card');
-      productCard.dataset.id = item.id;
-      productCard.innerHTML = `
-        <img src="${item.image || 'https://via.placeholder.com/150'}" alt="${item.name}">
-        <div class="product-info">
-          <h3>${item.name}</h3>
-          <p>₹${item.price}</p>
-          <button class="remove-from-cart">Remove</button>
-          <a href="#" class="order-now">Order Now</a>
-        </div>
-      `;
-      cartGrid.appendChild(productCard);
-    });
-    console.log('Cart rendering complete');
-
-    // Show payment status if cart is not empty and payment not verified
-    const paymentStatus = getElement('payment-status');
-    if (paymentStatus && !verifyPayment(getUserEmail()) && cart.length) {
-      paymentStatus.style.display = 'block';
-    } else if (paymentStatus) {
-      paymentStatus.style.display = 'none';
-    }
-  }
-
-  // Feedback Form (help.html)
-  const form = getElement('feedback-form');
-  const popup = getElement('thank-you-popup');
-  const closeBtn = getElement('close-popup');
-  if (form && popup && closeBtn) {
-    form.addEventListener('submit', (e) => {
+  // REGISTER
+  if(registerForm){
+    registerForm.addEventListener('submit', e=>{
       e.preventDefault();
-      const name = getElement('name')?.value;
-      const email = getElement('email')?.value;
-      const message = getElement('message')?.value;
-      const rating = document.querySelector('input[name="rating"]:checked')?.value;
-      if (!name || !email || !message) return alert('Please fill all fields');
-      console.log('Feedback submitted:', { name, email, message, rating });
-      form.reset();
-      popup.style.display = 'flex';
-    });
-    closeBtn.addEventListener('click', () => {
-      popup.style.display = 'none';
-    });
-  }
-
-  // COD Payment (cod.html)
-  const codForm = getElement('cod-form');
-  const successMsg = getElement('success-msg');
-  if (codForm && successMsg) {
-    codForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const name = codForm.querySelector('input[placeholder="Your Name"]')?.value;
-      const address = codForm.querySelector('input[placeholder="Address"]')?.value;
-      const phone = codForm.querySelector('input[placeholder="Phone Number"]')?.value;
-      if (!name || !address || !phone) {
-        const email = getUserEmail();
-        if (email) recordPayment('COD', 'failed', email);
-        return alert('Please fill all fields');
+      const username = document.querySelector('#register-username').value.trim();
+      const email = document.querySelector('#register-email').value.trim();
+      const password = document.querySelector('#register-password').value.trim();
+      const res = Auth.register({username,email,password});
+      if(res.success){
+        alert('Registration successful! Please login.');
+        location.href = 'login.html';
+      } else {
+        alert(res.message);
       }
-      const email = getUserEmail();
-      paymentConfirmed = true;
-      localStorage.setItem('paymentConfirmed', JSON.stringify(paymentConfirmed));
-      recordPayment('COD', 'success', email, cart);
-      codForm.style.display = 'none';
-      successMsg.style.display = 'block';
-      console.log('COD order placed:', { name, address, phone });
     });
   }
+};
 
-  // Initialize
-  if (['index.html', 'men.html', 'category.html'].includes(currentPage)) {
-    if (getToken()) loadProducts();
-    else if (authSection) authSection.style.display = 'block';
-    else window.location.href = 'login.html';
-  }
-  if (currentPage === 'wishlist.html') renderWishlist();
-  if (currentPage === 'yourcart.html') renderCart();
-  if (currentPage === 'statement.html' && getUserEmail() === 'owner@example.com' && localStorage.getItem('ownerAuthenticated') === 'true') {
-    renderStatement();
-  }
-});
+/* ==========================================================
+   CHECKOUT PAGE RENDER
+========================================================== */
+const renderCheckoutPage = () => {
+  const container = document.querySelector('#checkout-container');
+  if(!container) return;
+  container.innerHTML = `
+    <h2>Order Summary</h2>
+    <div id="checkout-items"></div>
+    <p id="checkout-total">Total: ₹${Cart.calculateTotal()}</p>
+    <button id="checkout-cod">Pay with COD</button>
+    <button id="checkout-qr">Pay with QR</button>
+  `;
+  const itemsContainer = document.querySelector('#checkout-items');
+  state.cart.forEach(item=>{
+    const product = state.products.find(p=>p.id===item.productId);
+    const div = document.createElement('div');
+    div.textContent = `${product.name} x${item.quantity} - ₹${product.price*item.quantity}`;
+    itemsContainer.appendChild(div);
+  });
+
+  document.querySelector('#checkout-cod').addEventListener('click', ()=>{
+    const order = Order.createOrder('COD');
+    if(order) alert(`Order ${order.id} placed with COD!`);
+    location.href = 'statement.html';
+  });
+
+  document.querySelector('#checkout-qr').addEventListener('click', ()=>{
+    const order = Order.createOrder('QR');
+    if(order) alert(`Order ${order.id} placed with QR!`);
+    location.href = 'qr.html';
+  });
+};
+
+/* ==========================================================
+   INIT SCRIPT
+========================================================== */
+document.addEventListener('DOMContentLoaded', initPage);
