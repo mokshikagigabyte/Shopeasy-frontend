@@ -3,17 +3,16 @@
 ========================================================== */
 const BASE_URL = "https://shopeasy-backend-3-i96s.onrender.com";
 
-/* ==========================================================
-   NAVBAR – HAMBURGER
-========================================================== */
-const hamburger = document.querySelector(".hamburger");
-const navLinks = document.querySelector(".nav-links");
+const isAuthPage =
+  location.pathname.includes("login.html") ||
+  location.pathname.includes("register.html");
 
-if (hamburger && navLinks) {
-  hamburger.addEventListener("click", () => {
-    navLinks.classList.toggle("active");
-  });
+const token = localStorage.getItem("token");
+
+if (!token && !isAuthPage) {
+  location.href = "login.html";
 }
+
 
 /* ==========================================================
    SEARCH (FRONTEND FILTER)
@@ -250,8 +249,11 @@ if (registerForm) {
       body: JSON.stringify({ name, email, password })
     });
 
-    const data = await res.json();
-    res.ok ? alert("Registered successfully") : alert(data.message || "Register failed");
+    if (res.ok) {
+  alert("Registered successfully. Please login.");
+  location.href = "login.html";
+}
+
   });
 }
 
@@ -277,6 +279,7 @@ if (codForm) {
     res.ok ? alert("Order placed successfully") : alert("Order failed");
   });
 }
+
 
 /* ==========================================================
    QR PAYMENT (DEMO FLOW)
@@ -336,3 +339,16 @@ async function loadStatements() {
     `;
   });
 }
+
+document.addEventListener("DOMContentLoaded", function () {
+
+  const hamburger = document.querySelector(".hamburger");
+  const navLinks = document.querySelector(".nav-links");
+
+  if (hamburger && navLinks) {
+    hamburger.addEventListener("click", function () {
+      navLinks.classList.toggle("active");
+    });
+  }
+
+});
