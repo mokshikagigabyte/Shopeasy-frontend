@@ -1,18 +1,23 @@
+
 /* ==========================================================
    BASE CONFIG
 ========================================================== */
 const BASE_URL = "https://shopeasy-backend-3-i96s.onrender.com";
 
-const isAuthPage =
-  location.pathname.includes("login.html") ||
-  location.pathname.includes("register.html");
+/* ==========================================================
+   AUTH GUARD (RUN AFTER DOM LOAD)
+========================================================== */
+document.addEventListener("DOMContentLoaded", () => {
+  const isAuthPage =
+    location.pathname.includes("login.html") ||
+    location.pathname.includes("register.html");
 
-const token = localStorage.getItem("token");
+  const token = localStorage.getItem("token");
 
-if (!token && !isAuthPage) {
-  location.href = "login.html";
-}
-
+  if (!token && !isAuthPage) {
+    location.href = "login.html";
+  }
+});
 
 /* ==========================================================
    SEARCH (FRONTEND FILTER)
@@ -51,7 +56,17 @@ if (searchInput && searchResults) {
 }
 
 /* ==========================================================
-   ADD TO CART (ALL PRODUCT PAGES)
+   AUTH HEADER HELPER
+========================================================== */
+function authHeaders() {
+  return {
+    "Content-Type": "application/json",
+    "Authorization": `Bearer ${localStorage.getItem("token")}`
+  };
+}
+
+/* ==========================================================
+   ADD TO CART
 ========================================================== */
 document.querySelectorAll(".add-to-cart").forEach(btn => {
   btn.addEventListener("click", async e => {
@@ -69,20 +84,21 @@ document.querySelectorAll(".add-to-cart").forEach(btn => {
     try {
       const res = await fetch(`${BASE_URL}/cart/add`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: authHeaders(),
         body: JSON.stringify(payload)
       });
+
       const data = await res.json();
       res.ok ? alert("🛒 Added to cart") : alert(data.message || "Cart failed");
     } catch (err) {
-      console.error(err);
       alert("Server error");
+      console.error(err);
     }
   });
 });
 
 /* ==========================================================
-   WISHLIST – ADD (ALL PRODUCT PAGES)
+   WISHLIST ADD
 ========================================================== */
 document.querySelectorAll(".wishlist-icon").forEach(icon => {
   icon.addEventListener("click", async e => {
@@ -99,9 +115,10 @@ document.querySelectorAll(".wishlist-icon").forEach(icon => {
     try {
       const res = await fetch(`${BASE_URL}/wishlist/add`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: authHeaders(),
         body: JSON.stringify(payload)
       });
+
       if (res.ok) {
         icon.classList.toggle("active");
         alert("❤️ Added to wishlist");
@@ -113,110 +130,115 @@ document.querySelectorAll(".wishlist-icon").forEach(icon => {
 });
 
 /* ==========================================================
-   WISHLIST PAGE – LOAD / REMOVE / MOVE TO CART
+   WISHLIST PAGE LOAD
 ========================================================== */
 const wishlistGrid = document.getElementById("wishlistGrid");
 if (wishlistGrid) loadWishlist();
 
 async function loadWishlist() {
-  try {
-    const res = await fetch(`${BASE_URL}/wishlist`);
-    const items = await res.json();
-    wishlistGrid.innerHTML = "";
+  const res = await fetch(`${BASE_URL}/wishlist`, {
+    headers: authHeaders()
+  });
 
-    if (!items.length) {
-      wishlistGrid.innerHTML = "<p>Your wishlist is empty ❤️</p>";
-      return;
-    }
+  const items = await res.json();
+  wishlistGrid.innerHTML = "";
 
-    items.forEach(item => {
-      const div = document.createElement("div");
-      div.className = "wishlist-card";
-      div.innerHTML = `
-        <img src="${item.image}">
-        <h3>${item.name}</h3>
-        <p>₹${item.price}</p>
-        <button class="remove">Remove</button>
-        <button class="move">Move to Cart</button>
-      `;
-
-      div.querySelector(".remove").onclick = async () => {
-        await fetch(`${BASE_URL}/wishlist/remove/${item.productId}`, { method: "DELETE" });
-        loadWishlist();
-      };
-
-      div.querySelector(".move").onclick = async () => {
-        await fetch(`${BASE_URL}/cart/add`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ ...item, quantity: 1 })
-        });
-        await fetch(`${BASE_URL}/wishlist/remove/${item.productId}`, { method: "DELETE" });
-        loadWishlist();
-      };
-
-      wishlistGrid.appendChild(div);
-    });
-  } catch (err) {
-    console.error(err);
+  if (!items.length) {
+    wishlistGrid.innerHTML = "<p>Your wishlist is empty ❤️</p>";
+    return;
   }
+
+  items.forEach(item => {
+    const div = document.createElement("div");
+    div.className = "wishlist-card";
+    div.innerHTML = `
+      <img src="${item.image}">
+      <h3>${item.name}</h3>
+      <p>₹${item.price}</p>
+      <button class="remove">Remove</button>
+      <button class="move">Move to Cart</button>
+    `;
+
+    div.querySelector(".remove").onclick = async () => {
+      await fetch(`${BASE_URL}/wishlist/remove/${item.productId}`, {
+        method: "DELETE",
+        headers: authHeaders()
+      });
+      loadWishlist();
+    };
+
+    div.querySelector(".move").onclick = async () => {
+      await fetch(`${BASE_URL}/cart/add`, {
+        method: "POST",
+        headers: authHeaders(),
+        body: JSON.stringify({ ...item, quantity: 1 })
+      });
+      await fetch(`${BASE_URL}/wishlist/remove/${item.productId}`, {
+        method: "DELETE",
+        headers: authHeaders()
+      });
+      loadWishlist();
+    };
+
+    wishlistGrid.appendChild(div);
+  });
 }
 
 /* ==========================================================
-   CART PAGE – LOAD / REMOVE / TOTAL
+   CART PAGE
 ========================================================== */
 const cartGrid = document.getElementById("cartGrid");
 if (cartGrid) loadCart();
 
 async function loadCart() {
-  try {
-    const res = await fetch(`${BASE_URL}/cart`);
-    const items = await res.json();
-    cartGrid.innerHTML = "";
+  const res = await fetch(`${BASE_URL}/cart`, {
+    headers: authHeaders()
+  });
 
-    if (!items.length) {
-      cartGrid.innerHTML = "<p>Your cart is empty 🛒</p>";
-      return;
-    }
+  const items = await res.json();
+  cartGrid.innerHTML = "";
 
-    let total = 0;
-
-    items.forEach(item => {
-      total += item.price * item.quantity;
-      const div = document.createElement("div");
-      div.className = "cart-card";
-      div.innerHTML = `
-        <img src="${item.image}">
-        <h3>${item.name}</h3>
-        <p>₹${item.price}</p>
-        <p>Qty: ${item.quantity}</p>
-        <button>Remove</button>
-      `;
-
-      div.querySelector("button").onclick = async () => {
-        await fetch(`${BASE_URL}/cart/remove/${item.productId}`, { method: "DELETE" });
-        loadCart();
-      };
-
-      cartGrid.appendChild(div);
-    });
-
-    const totalDiv = document.createElement("h2");
-    totalDiv.innerText = `Total: ₹${total}`;
-    cartGrid.appendChild(totalDiv);
-
-  } catch (err) {
-    console.error(err);
+  if (!items.length) {
+    cartGrid.innerHTML = "<p>Your cart is empty 🛒</p>";
+    return;
   }
+
+  let total = 0;
+
+  items.forEach(item => {
+    total += item.price * item.quantity;
+    const div = document.createElement("div");
+    div.className = "cart-card";
+    div.innerHTML = `
+      <img src="${item.image}">
+      <h3>${item.name}</h3>
+      <p>₹${item.price}</p>
+      <p>Qty: ${item.quantity}</p>
+      <button>Remove</button>
+    `;
+
+    div.querySelector("button").onclick = async () => {
+      await fetch(`${BASE_URL}/cart/remove/${item.productId}`, {
+        method: "DELETE",
+        headers: authHeaders()
+      });
+      loadCart();
+    };
+
+    cartGrid.appendChild(div);
+  });
+
+  cartGrid.innerHTML += `<h2>Total: ₹${total}</h2>`;
 }
 
 /* ==========================================================
-   LOGIN & REGISTER (NO INLINE JS)
+   LOGIN
 ========================================================== */
 const loginForm = document.getElementById("login-form");
 if (loginForm) {
   loginForm.addEventListener("submit", async e => {
     e.preventDefault();
+    
     const email = loginForm.querySelector("#login-email").value;
     const password = loginForm.querySelector("#login-password").value;
 
@@ -227,18 +249,25 @@ if (loginForm) {
     });
 
     const data = await res.json();
+
     if (res.ok) {
       localStorage.setItem("token", data.token);
       alert("Login successful");
       location.href = "index.html";
-    } else alert(data.message || "Login failed");
+    } else {
+      alert(data.message || "Login failed");
+    }
   });
 }
 
+/* ==========================================================
+   REGISTER
+========================================================== */
 const registerForm = document.getElementById("register-form");
 if (registerForm) {
   registerForm.addEventListener("submit", async e => {
     e.preventDefault();
+    
     const name = registerForm.querySelector("#register-username").value;
     const email = registerForm.querySelector("#register-email").value;
     const password = registerForm.querySelector("#register-password").value;
@@ -250,105 +279,23 @@ if (registerForm) {
     });
 
     if (res.ok) {
-  alert("Registered successfully. Please login.");
-  location.href = "login.html";
-}
-
-  });
-}
-
-/* ==========================================================
-   COD ORDER
-========================================================== */
-const codForm = document.getElementById("cod-form");
-if (codForm) {
-  codForm.addEventListener("submit", async e => {
-    e.preventDefault();
-    const payload = {
-      name: codForm.querySelector('input[placeholder="Your Name"]').value,
-      address: codForm.querySelector('input[placeholder="Address"]').value,
-      phone: codForm.querySelector('input[placeholder="Phone Number"]').value
-    };
-
-    const res = await fetch(`${BASE_URL}/order/cod`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload)
-    });
-
-    res.ok ? alert("Order placed successfully") : alert("Order failed");
-  });
-}
-
-
-/* ==========================================================
-   QR PAYMENT (DEMO FLOW)
-========================================================== */
-let qrScanned = false;
-document.getElementById("scan-qr-btn")?.addEventListener("click", () => {
-  qrScanned = true;
-  alert("QR scanned (demo)");
-});
-
-document.getElementById("confirm-payment")?.addEventListener("click", () => {
-  document.getElementById("qr-success-msg").style.display = qrScanned ? "block" : "none";
-  document.getElementById("qr-failure-msg").style.display = qrScanned ? "none" : "block";
-});
-
-/* ==========================================================
-   OWNER STATEMENT (ADMIN)
-========================================================== */
-const ownerForm = document.getElementById("owner-login-form");
-if (ownerForm) {
-  ownerForm.addEventListener("submit", async e => {
-    e.preventDefault();
-    const email = ownerForm.querySelector("#owner-email").value;
-    const password = ownerForm.querySelector("#owner-password").value;
-
-    const res = await fetch(`${BASE_URL}/owner/login`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password })
-    });
-
-    if (res.ok) {
-      document.getElementById("auth-section").style.display = "none";
-      document.getElementById("statement-section").style.display = "block";
-      loadStatements();
+      alert("Registered successfully. Please login.");
+      location.href = "login.html";
     } else {
-      document.getElementById("error-msg").style.display = "block";
+      const data = await res.json();
+      alert(data.message || "Registration failed");
     }
   });
 }
 
-async function loadStatements() {
-  const res = await fetch(`${BASE_URL}/owner/statements`);
-  const data = await res.json();
-  const body = document.getElementById("statement-body");
-  body.innerHTML = "";
-  data.forEach(tx => {
-    body.innerHTML += `
-      <tr>
-        <td>${tx.transactionId}</td>
-        <td>${tx.email}</td>
-        <td>${tx.paymentMethod}</td>
-        <td>${tx.status}</td>
-        <td>${new Date(tx.createdAt).toLocaleString()}</td>
-        <td>${tx.items.map(i => i.name).join(", ")}</td>
-      </tr>
-    `;
+/* ==========================================================
+   NAV TOGGLE
+========================================================== */
+const hamburger = document.querySelector(".hamburger");
+const navLinks = document.querySelector(".nav-links");
+
+if (hamburger && navLinks) {
+  hamburger.addEventListener("click", () => {
+    navLinks.classList.toggle("active");
   });
 }
-
-document.addEventListener("DOMContentLoaded", function () {
-
-  const hamburger = document.querySelector(".hamburger");
-  const navLinks = document.querySelector(".nav-links");
-
-  if (hamburger && navLinks) {
-    hamburger.addEventListener("click", function () {
-      navLinks.classList.toggle("active");
-    });
-  }
-
-});
