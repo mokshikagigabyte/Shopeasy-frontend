@@ -2,44 +2,71 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>ShopEasy - Login/Register</title>
+  <title>ShopEasy - Login / Register</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="./styles.css">
 </head>
+
 <body class="auth-body">
 
-  <!-- Login Form -->
-  <h2>Login</h2>
-  <form id="login-form">
-    <label for="login-email">Email:</label><br>
-    <input type="email" id="login-email" required><br><br>
+  <div class="auth-page">
+    <div class="form-container">
 
-    <label for="login-password">Password:</label><br>
-    <input type="password" id="login-password" required><br><br>
+      <!-- LOGIN -->
+      <h2 id="login">Login</h2>
+      <form id="login-form">
+        <div class="form-group">
+          <input type="email" id="login-email" required>
+          <label>Email</label>
+        </div>
 
-    <button type="submit">Login</button>
-  </form>
-  <p>Don't have an account? <a href="#register">Register here</a></p>
+        <div class="form-group">
+          <input type="password" id="login-password" required>
+          <label>Password</label>
+        </div>
 
-  <hr>
+        <button type="submit">Login</button>
+      </form>
 
-  <!-- Register Form -->
-  <h2 id="register">Register</h2>
-  <form id="register-form">
-    <label for="register-username">Username:</label><br>
-    <input type="text" id="register-username" required><br><br>
+      <p style="margin-top:15px">
+        Don’t have an account?
+        <a href="#register">Register here</a>
+      </p>
 
-    <label for="register-email">Email:</label><br>
-    <input type="email" id="register-email" required><br><br>
+      <hr style="margin:20px 0">
 
-    <label for="register-password">Password:</label><br>
-    <input type="password" id="register-password" required><br><br>
+      <!-- REGISTER -->
+      <h2 id="register">Register</h2>
+      <form id="register-form">
+        <div class="form-group">
+          <input type="text" id="register-username" required>
+          <label>Username</label>
+        </div>
 
-    <button type="submit">Register</button>
-  </form>
-  <p>Already have an account? <a href="#login">Login here</a></p>
+        <div class="form-group">
+          <input type="email" id="register-email" required>
+          <label>Email</label>
+        </div>
 
-<script src="script.js"></script>
+        <div class="form-group">
+          <input type="password" id="register-password" required>
+          <label>Password</label>
+        </div>
 
+        <button type="submit">Register</button>
+      </form>
 
+      <p style="margin-top:15px">
+        Already have an account?
+        <a href="#login">Login here</a>
+      </p>
+
+    </div>
+  </div>
+
+  <!-- JS -->
+  <script src="script.js"></script>
 </body>
 </html>
